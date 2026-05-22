@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ELS© — About</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #0A0A0A; padding-top: 80px; padding-bottom: 60px; }
+
+    .about-wrap {
+      padding: 60px 60px 80px;
+      max-width: 660px;
+    }
+
+    .page-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .bio {
+      font-size: 13px;
+      line-height: 210%;
+      color: #AAA;
+      margin-bottom: 48px;
+    }
+    .bio strong {
+      color: #F0EDE8;
+      font-weight: 400;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid #1E1E1E;
+      margin: 40px 0;
+      max-width: 600px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .disciplines-list {
+      list-style: none;
+      margin-bottom: 0;
+    }
+    .disciplines-list li {
+      font-size: 12px;
+      color: #666;
+      letter-spacing: 0.1em;
+      line-height: 2;
+      padding-left: 16px;
+      position: relative;
+    }
+    .disciplines-list li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: #333;
+    }
+
+    .clients-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .client-tag {
+      font-size: 11px;
+      color: #666;
+      letter-spacing: 0.12em;
+      border: 1px solid #333;
+      padding: 5px 12px;
+      text-transform: uppercase;
+    }
+
+    .agencies-list {
+      list-style: none;
+    }
+    .agencies-list li {
+      font-size: 12px;
+      line-height: 2;
+      letter-spacing: 0.08em;
+    }
+    .agencies-list .agency-name {
+      color: #F0EDE8;
+    }
+    .agencies-list .agency-city {
+      color: #555;
+      margin-left: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor-glow"></div>
+  <div id="cursor"></div>
+
+  <nav>
+    <a class="logo" href="index.html"><img src="assets/logoELS.svg" alt="ELS©"></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="about-wrap">
+    <div class="page-eyebrow">About</div>
+
+    <p class="bio">
+      Based in Paris, <strong>Edouard Le Scouarnec</strong> is a director working across commercial, music video, and narrative formats. Trained in cinematography, he brings a particular <strong>attention to light and gesture</strong> — finding the precise moment where story and image align.
+    </p>
+    <p class="bio">
+      His work is defined by <strong>restraint</strong> — clean compositions, deliberate pacing, and a refusal to over-explain. He believes the <strong>most powerful images</strong> are those that leave room for the viewer. Silence is never emptiness; it is direction.
+    </p>
+    <p class="bio">
+      Currently based in Paris and open to <strong>international work</strong>. Available for commercial campaigns, branded content, and narrative projects. Fluent in French and English.
+    </p>
+
+    <hr class="divider">
+
+    <div class="section-label">Disciplines</div>
+    <ul class="disciplines-list">
+      <li>Commercial Direction</li>
+      <li>Music Video</li>
+      <li>Narrative Short Film</li>
+      <li>Branded Content</li>
+    </ul>
+
+    <hr class="divider">
+
+    <div class="section-label">Selected Clients</div>
+    <div class="clients-row">
+      <span class="client-tag">Betclic</span>
+      <span class="client-tag">Harry's</span>
+      <span class="client-tag">Econocom</span>
+      <span class="client-tag">La Redoute</span>
+      <span class="client-tag">Citroën</span>
+      <span class="client-tag">Renault</span>
+      <span class="client-tag">Décathlon</span>
+      <span class="client-tag">Canal+</span>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section-label">Represented By</div>
+    <ul class="agencies-list">
+      <li><span class="agency-name">Players</span><span class="agency-city">France</span></li>
+      <li><span class="agency-name">Lovely Animals Studio</span><span class="agency-city">Canada, USA</span></li>
+      <li><span class="agency-name">FORM London</span><span class="agency-city">UK</span></li>
+      <li><span class="agency-name">Viewfinder Management</span><span class="agency-city">Middle East</span></li>
+    </ul>
+  </div>
+
+  <footer class="footer-strip">
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/edouard_le_scouarnec/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://vimeo.com/edouardlescouarnec" target="_blank" rel="noopener">Vimeo</a>
+      <a href="https://www.linkedin.com/in/%C3%A9douard-le-scouarnec-b733422b/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer-ticker">
+      <div class="footer-ticker-inner" id="ticker-inner"></div>
+    </div>
+    <div class="footer-copy">© 2026 ELS</div>
+  </footer>
+
+  <script src="cursor.js"></script>
+  <script>
+    const tickerContent = 'BETCLIC · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; HARRY\'S · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; ECONOCOM · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; LA REDOUTE · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; CITROËN · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; RENAULT · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; DÉCATHLON · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; CANAL+ · BRANDED &nbsp;&nbsp;·&nbsp;&nbsp; FRESH · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; ';
+    const ticker = document.getElementById('ticker-inner');
+    ticker.innerHTML = tickerContent + tickerContent;
+  </script>
+</body>
+</html>

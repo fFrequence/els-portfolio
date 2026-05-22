@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ELS© — Contact</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #0A0A0A; padding-top: 80px; padding-bottom: 60px; }
+
+    .contact-wrap {
+      padding: 60px 60px 80px;
+      max-width: 760px;
+    }
+
+    hr.divider {
+      border: none;
+      border-top: 1px solid #1E1E1E;
+      margin: 40px 0;
+    }
+
+    .contact-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      padding: 20px 0;
+      border-bottom: 1px solid #1A1A1A;
+    }
+    .contact-row:first-child { border-top: 1px solid #1A1A1A; }
+
+    .contact-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: #888;
+      text-transform: uppercase;
+      width: 200px;
+      flex-shrink: 0;
+    }
+    .contact-value {
+      font-size: 13px;
+      color: #F0EDE8;
+      letter-spacing: 0.08em;
+    }
+    .contact-value a {
+      transition: color 0.2s;
+    }
+    .contact-value a:hover { color: #888; }
+
+    /* Agencies section */
+    .agencies-section { margin-top: 48px; }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .agency-category {
+      margin-bottom: 36px;
+    }
+    .agency-category-label {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: #555;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #1A1A1A;
+    }
+
+    .agency-entries {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .agency-entry {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0;
+    }
+    .agency-location {
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding-top: 2px;
+    }
+    .agency-info { }
+    .agency-name {
+      font-size: 13px;
+      color: #F0EDE8;
+      letter-spacing: 0.08em;
+      font-weight: 400;
+      margin-bottom: 4px;
+    }
+    .agency-contact {
+      font-size: 12px;
+      color: #888;
+      letter-spacing: 0.06em;
+      line-height: 1.8;
+      margin-bottom: 4px;
+    }
+    .agency-address {
+      font-size: 11px;
+      color: #666;
+      letter-spacing: 0.06em;
+      line-height: 1.7;
+      margin-bottom: 6px;
+    }
+    .agency-email {
+      font-size: 11px;
+      color: #777;
+      letter-spacing: 0.06em;
+      display: block;
+      transition: color 0.2s;
+    }
+    .agency-email:hover { color: #F0EDE8; }
+
+    /* Socials */
+    .socials-section { margin-top: 48px; }
+    .socials-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .social-link {
+      font-size: 13px;
+      color: #F0EDE8;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: inline-block;
+      transition: color 0.2s;
+    }
+    .social-link:hover { color: #555; }
+    .social-link::after {
+      content: ' ↗';
+      font-size: 10px;
+      color: #444;
+    }
+  </style>
+</head>
+<body>
+  <div id="cursor-glow"></div>
+  <div id="cursor"></div>
+
+  <nav>
+    <a class="logo" href="index.html"><img src="assets/logoELS.svg" alt="ELS©"></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="contact-wrap">
+
+    <div class="contact-row">
+      <span class="contact-label">All Inquiries</span>
+      <span class="contact-value"><a href="mailto:els@edouardlescouarnec.com">ELS@EDOUARDLESCOUARNEC.COM</a></span>
+    </div>
+
+    <!-- Agencies -->
+    <div class="agencies-section">
+      <div class="section-label">Representation</div>
+
+      <div class="agency-category">
+        <div class="agency-entries">
+
+          <div class="agency-entry">
+            <div class="agency-location">France</div>
+            <div class="agency-info">
+              <div class="agency-name">Players</div>
+              <div class="agency-address">8 rue d'Aboukir<br>75002 Paris</div>
+              <a class="agency-email" href="mailto:hello@players.paris">HELLO@PLAYERS.PARIS</a>
+              <a class="agency-email" href="mailto:melanie@players.paris">MELANIE@PLAYERS.PARIS</a>
+            </div>
+          </div>
+
+          <div class="agency-entry">
+            <div class="agency-location">Canada / USA</div>
+            <div class="agency-info">
+              <div class="agency-name">Lovely Animals Studio</div>
+              <div class="agency-address">123 Melrose Avenue<br>Los Ángeles</div>
+              <a class="agency-email" href="mailto:rob@lovelyanimals.studio">ROB@LOVELYANIMALS.STUDIO</a>
+            </div>
+          </div>
+
+          <div class="agency-entry">
+            <div class="agency-location">UK</div>
+            <div class="agency-info">
+              <div class="agency-name">FORM London</div>
+              <div class="agency-address">27 Midwood Cl, London NW2 6YL<br>United Kingdom</div>
+              <a class="agency-email" href="mailto:hello@form.london.com">HELLO@FORM.LONDON.COM</a>
+            </div>
+          </div>
+
+          <div class="agency-entry">
+            <div class="agency-location">Middle East</div>
+            <div class="agency-info">
+              <div class="agency-name">Viewfinder Management</div>
+              <div class="agency-contact">Brigitte Janoschka</div>
+              <div class="agency-address">Geistenstrasse 18<br>D-40476 Düsseldorf, Germany</div>
+              <a class="agency-email" href="mailto:info@view-finder.de">INFO@VIEW-FINDER.DE</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Socials -->
+    <div class="socials-section">
+      <div class="section-label">Socials</div>
+      <div class="socials-row">
+        <a class="social-link" href="https://www.instagram.com/edouard_le_scouarnec/" target="_blank" rel="noopener">Instagram</a>
+        <a class="social-link" href="https://vimeo.com/edouardlescouarnec" target="_blank" rel="noopener">Vimeo</a>
+        <a class="social-link" href="https://www.linkedin.com/in/%C3%A9douard-le-scouarnec-b733422b/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="footer-strip">
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/edouard_le_scouarnec/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://vimeo.com/edouardlescouarnec" target="_blank" rel="noopener">Vimeo</a>
+      <a href="https://www.linkedin.com/in/%C3%A9douard-le-scouarnec-b733422b/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer-ticker">
+      <div class="footer-ticker-inner" id="ticker-inner"></div>
+    </div>
+    <div class="footer-copy">© 2026 ELS</div>
+  </footer>
+
+  <script src="cursor.js"></script>
+  <script>
+    const tickerContent = 'BETCLIC · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; HARRY\'S · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; ECONOCOM · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; LA REDOUTE · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; CITROËN · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; RENAULT · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; DÉCATHLON · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; CANAL+ · BRANDED &nbsp;&nbsp;·&nbsp;&nbsp; FRESH · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; ';
+    const ticker = document.getElementById('ticker-inner');
+    ticker.innerHTML = tickerContent + tickerContent;
+  </script>
+</body>
+</html>

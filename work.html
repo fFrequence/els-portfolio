@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ELS© — Work</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #0A0A0A; padding-top: 80px; padding-bottom: 60px; }
+
+    .page-header {
+      padding: 48px 48px 32px;
+    }
+    .page-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: #888;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-family: 'Argent Pixel CF', serif;
+      font-weight: 400;
+      font-size: clamp(80px, 10vw, 130px);
+      color: #F0EDE8;
+      line-height: 0.9;
+    }
+    .page-title em { font-style: italic; }
+    .year-heading h2 {
+      font-family: 'Argent Pixel CF', serif !important;
+      font-weight: 400 !important;
+      font-style: italic !important;
+    }
+    .film-count {
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 0.15em;
+      margin-top: 16px;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      position: sticky;
+      top: 62px;
+      z-index: 90;
+      background: rgba(10, 10, 10, 0.72);
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      border-bottom: 1px solid #1A1A1A;
+      padding: 14px 48px;
+      display: flex;
+      gap: 4px;
+    }
+    .filter-btn {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #555;
+      background: none;
+      border: 1px solid transparent;
+      padding: 8px 16px;
+      cursor: none;
+      transition: all 0.2s;
+    }
+    .filter-btn:hover { color: #888; border-color: #333; }
+    .filter-btn.active { color: #F0EDE8; border-color: #444; }
+
+    /* Gallery */
+    .gallery { padding: 0 48px 48px; }
+
+    .year-section { margin-top: 56px; }
+    .year-heading {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 28px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #1A1A1A;
+    }
+    .year-heading h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: clamp(28px, 3.5vw, 44px);
+      color: #F0EDE8;
+    }
+    .year-tag {
+      font-size: 11px;
+      color: #444;
+      letter-spacing: 0.15em;
+    }
+    .year-scroll {
+      font-size: 10px;
+      color: #333;
+      letter-spacing: 0.1em;
+      margin-left: auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    /* Work card */
+    .work-card {
+      position: relative;
+      cursor: none;
+    }
+    .work-card .camera-card {
+      position: relative;
+      width: 100%;
+      opacity: 1;
+      filter: brightness(1);
+      transition: border-color 0.2s, transform 0.2s, filter 0.2s;
+    }
+    .work-card:hover .camera-card {
+      border-color: #333;
+      transform: scale(1.04);
+      filter: brightness(1.05);
+    }
+    .camera-card .card-thumb { height: 0; padding-bottom: 62.5%; position: relative; }
+    .camera-card .card-thumb .placeholder,
+    .camera-card .card-thumb img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+    }
+    .work-card-info {
+      margin-top: 10px;
+    }
+    .work-card-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-style: italic;
+      font-size: 16px;
+      color: #F0EDE8;
+    }
+    .work-card-meta {
+      font-size: 10px;
+      color: #555;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-top: 3px;
+    }
+    .card-hud-bottom .agency {
+      font-size: 8px;
+      color: #555;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    /* Empty card */
+    .work-card.empty .camera-card {
+      opacity: 0.3;
+      filter: brightness(0.4);
+    }
+    .work-card.empty:hover .camera-card {
+      transform: none;
+      border-color: var(--border-2);
+    }
+    .work-card.empty .work-card-title { color: #444; }
+  </style>
+</head>
+<body>
+  <div id="cursor-glow"></div>
+  <div id="cursor"></div>
+
+  <nav>
+    <a class="logo" href="index.html"><img src="assets/logoELS.svg" alt="ELS©"></a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="work.html" class="active">Work</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-eyebrow">Portfolio</div>
+    <h1 class="page-title">All <em>Works</em></h1>
+    <div class="film-count">09 FILMS</div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" data-filter="all">All Works</button>
+    <button class="filter-btn" data-filter="commercial">Commercial</button>
+    <button class="filter-btn" data-filter="music-video">Music Video</button>
+    <button class="filter-btn" data-filter="narrative">Narrative</button>
+  </div>
+
+  <div class="gallery">
+
+    <!-- Freshest Sh*t // 2026 -->
+    <div class="year-section">
+      <div class="year-heading">
+        <h2>Freshest Sh*t</h2>
+        <span class="year-tag">// 2026</span>
+        <span class="year-scroll">— SCROLL</span>
+      </div>
+      <div class="cards-grid">
+
+        <div class="work-card" data-category="commercial" data-title="Betclic — La Ligne" data-meta="Commercial · 2026 · Agence : Publicis" data-vimeo="1183049164">
+          <div class="camera-card">
+            <div class="card-hud"><span>FPS 23.976 EI 800</span><span><span class="rec-dot"></span>REC</span></div>
+            <div class="card-thumb">
+              <img src="assets/betclic_la_ligne.jpg" alt="Betclic La Ligne">
+              <div class="corner-brackets"></div>
+              <div class="crosshair"></div>
+            </div>
+            <div class="card-hud-bottom">
+              <span><span class="stby-dot"></span>STBY</span>
+              <span>CLIP A001C001</span>
+              <span class="agency">AGENCE · PUBLICIS</span>
+            </div>
+          </div>
+          <div class="work-card-info">
+            <div class="work-card-title">Betclic — La Ligne</div>
+            <div class="work-card-meta">Commercial · 2026</div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="commercial" data-title="Harry's — Chocalin" data-meta="Commercial · 2026 · Agence : BETC" data-vimeo="1028199498">
+          <div class="camera-card">
+            <div class="card-hud"><span>FPS 23.976 EI 1600</span><span><span class="rec-dot"></span>REC</span></div>
+            <div class="card-thumb">
+              <img src="assets/harrys_chocalin.jpg" alt="Harry's Chocalin">
+              <div class="corner-brackets"></div>
+              <div class="crosshair"></div>
+            </div>
+            <div class="card-hud-bottom">
+              <span><span class="stby-dot"></span>STBY</span>
+              <span>CLIP A002C001</span>
+              <span class="agency">AGENCE · BETC</span>
+            </div>
+          </div>
+          <div class="work-card-info">
+            <div class="work-card-title">Harry's — Chocalin</div>
+            <div class="work-card-meta">Commercial · 2026</div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="commercial" data-title="Econocom — L'Aéroport" data-meta="Commercial · 2026 · Agence : DDB" data-vimeo="1118684712">
+          <div class="camera-card">
+            <div class="card-hud"><span>FPS 25 EI 800</span><span><span class="rec-dot"></span>REC</span></div>
+            <div class="card-thumb">
+              <img src="assets/econocom_laeroport.jpg" alt="Econocom L'Aéroport">
+              <div class="corner-brackets"></div>
+              <div class="crosshair"></div>
+            </div>
+            <div class="card-hud-bottom">
+              <span><span class="stby-dot"></span>STBY</span>
+              <span>CLIP A003C001</span>
+              <span class="agency">AGENCE · DDB</span>
+            </div>
+          </div>
+          <div class="work-card-info">
+            <div class="work-card-title">Econocom — L'Aéroport</div>
+            <div class="work-card-meta">Commercial · 2026</div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="commercial" data-title="Econocom — L'Hôpital" data-meta="Commercial · 2026 · Agence : DDB" data-vimeo="1118683671">
+          <div class="camera-card">
+            <div class="card-hud"><span>FPS 23.976 EI 1600</span><span><span class="rec-dot"></span>REC</span></div>
+            <div class="card-thumb">
+              <img src="assets/econocom_lhopital.jpg" alt="Econocom L'Hôpital">
+              <div class="corner-brackets"></div>
+              <div class="crosshair"></div>
+            </div>
+            <div class="card-hud-bottom">
+              <span><span class="stby-dot"></span>STBY</span>
+              <span>CLIP A004C001</span>
+              <span class="agency">AGENCE · DDB</span>
+            </div>
+          </div>
+          <div class="work-card-info">
+            <div class="work-card-title">Econocom — L'Hôpital</div>
+            <div class="work-card-meta">Commercial · 2026</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Still Pretty Good // 2025 -->
+    <div class="year-section">
+      <div class="year-heading">
+        <h2>Still Pretty Good</h2>
+        <span class="year-tag">// 2025</span>
+        <span class="year-scroll">— SCROLL</span>
+      </div>
+      <div class="cards-grid">
+
+        <div class="work-card" data-category="commercial" data-title="FRESH — La Frisée" data-meta="Commercial · 2025 · Agence : Marcel" data-vimeo="1086025854">
+          <div class="camera-card">
+            <div class="card-hud"><span>FPS 24 EI 800</span><span><span class="rec-dot"></span>REC</span></div>
+            <div class="card-thumb">
+              <img src="assets/fresh_la_frisee.jpg" alt="FRESH La Frisée">
+              <div class="corner-brackets"></div>
+              <div class="crosshair"></div>
+            </div>
+            <div class="card-hud-bottom">
+              <span><span class="stby-dot"></span>STBY</span>
+              <span>CLIP A005C001</span>
+              <span class="agency">AGENCE · MARCEL</span>
+            </div>
+          </div>
+          <div class="work-card-info">
+            <div class="work-card-title">FRESH — La Frisée</div>
+            <div class="work-card-meta">Commercial · 2025</div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="commercial" data-title="Phytoxil — Le Druide" data-meta="Commercial · 2025" data-vimeo="1164260465">
+          <div class="camera-card">
+            <div class="card-hud"><span>FPS 23.976 EI 800</span><span><span class="rec-dot"></span>REC</span></div>
+            <div class="card-thumb">
+              <img src="assets/phytoxil_le_druide.jpg" alt="Phytoxil Le Druide">
+              <div class="corner-brackets"></div>
+              <div class="crosshair"></div>
+            </div>
+            <div class="card-hud-bottom">
+              <span><span class="stby-dot"></span>STBY</span>
+              <span>CLIP A006C001</span>
+              <span class="agency">AGENCE · —</span>
+            </div>
+          </div>
+          <div class="work-card-info">
+            <div class="work-card-title">Phytoxil — Le Druide</div>
+            <div class="work-card-meta">Commercial · 2025</div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="commercial" data-title="Acova — Le Collectionneur" data-meta="Commercial · 2025" data-vimeo="1012687169">
+          <div class="camera-card">
+            <div class="card-hud"><span>FPS 23.976 EI 800</span><span><span class="rec-dot"></span>REC</span></div>
+            <div class="card-thumb">
+              <img src="assets/acova_le_collectionneur.jpg" alt="Acova Le Collectionneur">
+              <div class="corner-brackets"></div>
+              <div class="crosshair"></div>
+            </div>
+            <div class="card-hud-bottom">
+              <span><span class="stby-dot"></span>STBY</span>
+              <span>CLIP A007C001</span>
+              <span class="agency">AGENCE · —</span>
+            </div>
+          </div>
+          <div class="work-card-info">
+            <div class="work-card-title">Acova — Le Collectionneur</div>
+            <div class="work-card-meta">Commercial · 2025</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- The Humble Era // 2024 -->
+    <div class="year-section">
+      <div class="year-heading">
+        <h2>The Humble Era</h2>
+        <span class="year-tag">// 2024</span>
+        <span class="year-scroll">— SCROLL</span>
+      </div>
+      <div class="cards-grid">
+
+        <div class="work-card" data-category="commercial" data-title="Econocom — Le Bureau" data-meta="Commercial · 2024 · Agence : DDB" data-vimeo="1118687696">
+          <div class="camera-card">
+            <div class="card-hud"><span>FPS 25 EI 800</span><span><span class="rec-dot"></span>REC</span></div>
+            <div class="card-thumb">
+              <img src="assets/econocom_le_bureau.jpg" alt="Econocom Le Bureau">
+              <div class="corner-brackets"></div>
+              <div class="crosshair"></div>
+            </div>
+            <div class="card-hud-bottom">
+              <span><span class="stby-dot"></span>STBY</span>
+              <span>CLIP A008C001</span>
+              <span class="agency">AGENCE · DDB</span>
+            </div>
+          </div>
+          <div class="work-card-info">
+            <div class="work-card-title">Econocom — Le Bureau</div>
+            <div class="work-card-meta">Commercial · 2024</div>
+          </div>
+        </div>
+
+        <div class="work-card" data-category="commercial" data-title="Econocom — La Classe" data-meta="Commercial · 2024 · Agence : DDB" data-vimeo="1118682226">
+          <div class="camera-card">
+            <div class="card-hud"><span>FPS 24 EI 800</span><span><span class="rec-dot"></span>REC</span></div>
+            <div class="card-thumb">
+              <img src="assets/econocom_la_classe.jpg" alt="Econocom La Classe">
+              <div class="corner-brackets"></div>
+              <div class="crosshair"></div>
+            </div>
+            <div class="card-hud-bottom">
+              <span><span class="stby-dot"></span>STBY</span>
+              <span>CLIP A009C001</span>
+              <span class="agency">AGENCE · DDB</span>
+            </div>
+          </div>
+          <div class="work-card-info">
+            <div class="work-card-title">Econocom — La Classe</div>
+            <div class="work-card-meta">Commercial · 2024</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" id="modal">
+    <div class="modal-inner">
+      <div class="modal-hud-top">
+        <span id="modal-fps">FPS 23.976 EI 800</span>
+        <span><span class="rec-dot"></span>REC</span>
+        <button class="modal-close" id="modal-close-btn">[ ESC ] CLOSE</button>
+      </div>
+      <div class="modal-video">
+        <iframe id="modal-iframe" src="" allowfullscreen></iframe>
+      </div>
+      <div class="modal-info">
+        <div>
+          <div class="modal-title" id="modal-title"></div>
+          <div class="modal-meta" id="modal-meta"></div>
+        </div>
+        <button class="modal-share" id="modal-share">SHARE ↗</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">LINK COPIED ✓</div>
+
+  <footer class="footer-strip">
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/edouard_le_scouarnec/" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://vimeo.com/edouardlescouarnec" target="_blank" rel="noopener">Vimeo</a>
+      <a href="https://www.linkedin.com/in/%C3%A9douard-le-scouarnec-b733422b/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <div class="footer-ticker">
+      <div class="footer-ticker-inner" id="ticker-inner"></div>
+    </div>
+    <div class="footer-copy">© 2026 ELS</div>
+  </footer>
+
+  <script src="cursor.js"></script>
+  <script>
+    const tickerContent = 'BETCLIC · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; HARRY\'S · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; ECONOCOM · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; LA REDOUTE · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; CITROËN · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; RENAULT · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; DÉCATHLON · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; CANAL+ · BRANDED &nbsp;&nbsp;·&nbsp;&nbsp; FRESH · COMMERCIAL &nbsp;&nbsp;·&nbsp;&nbsp; ';
+    const ticker = document.getElementById('ticker-inner');
+    ticker.innerHTML = tickerContent + tickerContent;
+
+    // Filter
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.work-card').forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+
+    // Modal
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMeta = document.getElementById('modal-meta');
+    const modalIframe = document.getElementById('modal-iframe');
+    const modalShare = document.getElementById('modal-share');
+    const toast = document.getElementById('toast');
+
+    document.querySelectorAll('.work-card:not(.empty)').forEach(card => {
+      card.addEventListener('click', () => {
+        modalTitle.textContent = card.dataset.title || '';
+        modalMeta.textContent = card.dataset.meta || '';
+        const id = card.dataset.vimeo;
+        modalIframe.src = id ? `https://player.vimeo.com/video/${id}?autoplay=1&color=F0EDE8&title=0&byline=0&portrait=0` : '';
+        modal.classList.add('open');
+      });
+    });
+
+    document.getElementById('modal-close-btn').addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    function closeModal() {
+      modal.classList.remove('open');
+      modalIframe.src = '';
+    }
+
+    modalShare.addEventListener('click', () => {
+      navigator.clipboard.writeText(window.location.href);
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2000);
+    });
+  </script>
+</body>
+</html>
