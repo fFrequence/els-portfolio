@@ -26,10 +26,15 @@ function catLabel(data, id) {
 }
 
 // ─── Data source ───
-// data.js sets window.__DATA__. The admin overwrites that file in production.
-function loadData() {
-  if (!window.__DATA__) throw new Error('window.__DATA__ missing — make sure data.js loaded before render.js');
-  return window.__DATA__;
+// In production: fetch live data from /api/data (KV-backed, admin-editable).
+// Fallback: window.__DATA__ from the static data.js (works for local file:// dev).
+async function loadData() {
+  try {
+    const res = await fetch('/api/data', { cache: 'no-cache' });
+    if (res.ok) return await res.json();
+  } catch (_) { /* network/CORS — fall through */ }
+  if (window.__DATA__) return window.__DATA__;
+  throw new Error('No data available (no /api/data and no window.__DATA__)');
 }
 
 // ─── Renderers ───
@@ -264,10 +269,10 @@ function wireModal() {
 }
 
 // ─── Boot ───
-(function init() {
+(async function init() {
   let data;
   try {
-    data = loadData();
+    data = await loadData();
   } catch (err) {
     console.error('[render] data load failed', err);
     document.body.classList.add('loaded');
