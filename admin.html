@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ELS© — Admin</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: #0A0A0A; padding-top: 80px; padding-bottom: 80px; cursor: auto; }
+    html, body, * { cursor: auto !important; }
+    body.locked { padding-top: 0; padding-bottom: 0; height: 100vh; overflow: hidden; }
+
+    /* ── LOGIN ─────────────────────────────────────────────────────── */
+    #login {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 18px;
+      background: #080808;
+      z-index: 50;
+    }
+    #login.hide { display: none; }
+    #login .login-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.3em; color: #555;
+      text-transform: uppercase;
+    }
+    #login .login-title {
+      font-family: 'Argent Pixel CF', serif;
+      font-style: italic;
+      font-size: clamp(60px, 8vw, 100px);
+      color: #F0EDE8;
+    }
+    #login form {
+      display: flex; gap: 8px; margin-top: 8px;
+    }
+    #login input[type=password] {
+      background: #111;
+      border: 1px solid #2A2A2A;
+      color: #F0EDE8;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.1em;
+      padding: 12px 18px;
+      width: 280px;
+      outline: none;
+    }
+    #login input[type=password]:focus { border-color: #555; }
+    #login button {
+      background: #111;
+      border: 1px solid #2A2A2A;
+      color: #F0EDE8;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      padding: 0 18px;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+    #login button:hover { border-color: #555; }
+    #login .login-error {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.15em;
+      color: #CC2200;
+      min-height: 16px;
+    }
+
+    /* ── ADMIN HEADER ─────────────────────────────────────────────── */
+    #admin-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 56px;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      border-bottom: 1px solid #1A1A1A;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 40;
+    }
+    #admin-header .brand {
+      display: flex; align-items: center; gap: 16px;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.2em; color: #888;
+      text-transform: uppercase;
+    }
+    #admin-header .brand img { height: 14px; filter: invert(1); }
+    #admin-header .brand .live a {
+      color: #555; text-decoration: none; transition: color 0.2s;
+    }
+    #admin-header .brand .live a:hover { color: #F0EDE8; }
+    #admin-header .right {
+      display: flex; gap: 18px; align-items: center;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    #admin-header .status {
+      color: #555;
+    }
+    #admin-header .status.dirty { color: #CC8800; }
+    #admin-header .status.saved { color: #00CC33; }
+    #admin-header .status .dot {
+      display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+      background: currentColor; margin-right: 6px; vertical-align: middle;
+    }
+    #admin-header button.logout {
+      background: none; border: none; color: #555; cursor: pointer;
+      font-family: inherit; font-size: inherit; letter-spacing: inherit;
+      text-transform: inherit; padding: 0;
+    }
+    #admin-header button.logout:hover { color: #F0EDE8; }
+
+    /* ── TABS ─────────────────────────────────────────────────────── */
+    #tabs {
+      position: sticky;
+      top: 56px;
+      z-index: 30;
+      background: rgba(10, 10, 10, 0.85);
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      border-bottom: 1px solid #1A1A1A;
+      padding: 14px 24px;
+      display: flex;
+      gap: 4px;
+    }
+    #tabs button {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #555;
+      background: none;
+      border: 1px solid transparent;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    #tabs button:hover { color: #888; border-color: #2A2A2A; }
+    #tabs button.active { color: #F0EDE8; border-color: #444; }
+
+    /* ── CONTENT ──────────────────────────────────────────────────── */
+    .tab-pane {
+      padding: 32px 24px 32px;
+      max-width: 880px;
+    }
+    .tab-pane[hidden] { display: none; }
+
+    .section-eyebrow {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.2em; color: #888;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    /* ── FIELD WIDGET ─────────────────────────────────────────────── */
+    .field {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 12px;
+      margin-bottom: 10px;
+      align-items: start;
+    }
+    .field > label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 0.18em; color: #666;
+      text-transform: uppercase;
+      padding-top: 8px;
+    }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      background: #111;
+      border: 1px solid #1E1E1E;
+      color: #F0EDE8;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      padding: 7px 10px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field input:focus, .field textarea:focus, .field select:focus { border-color: #444; }
+    .field textarea { min-height: 80px; line-height: 1.6; resize: vertical; }
+    .field .field-hint {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 9px; letter-spacing: 0.1em; color: #444;
+      padding-top: 4px;
+    }
+    .field .with-button {
+      display: flex; gap: 8px;
+    }
+    .field .with-button input { flex: 1; }
+    .field button.aux {
+      background: #111;
+      border: 1px solid #2A2A2A;
+      color: #888;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      padding: 0 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .field button.aux:hover { color: #F0EDE8; border-color: #555; }
+    .field button.aux:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── CARD-IN-EDITOR ────────────────────────────────────────────── */
+    .edit-card {
+      border: 1px solid #1E1E1E;
+      background: #0D0D0D;
+      margin-bottom: 10px;
+    }
+    .edit-card-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.15s;
+    }
+    .edit-card-head:hover { background: #131313; }
+    .edit-card-head .grip {
+      color: #333;
+      font-size: 14px;
+      cursor: grab;
+    }
+    .edit-card-head .head-thumb {
+      width: 48px; height: 30px;
+      background: #1A1A1A; background-size: cover; background-position: center;
+      border: 1px solid #222;
+      flex-shrink: 0;
+    }
+    .edit-card-head .head-title {
+      flex: 1;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: #F0EDE8;
+    }
+    .edit-card-head .head-meta {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px; letter-spacing: 0.15em; color: #555;
+      text-transform: uppercase;
+    }
+    .edit-card-head .head-chev {
+      color: #444;
+      transition: transform 0.2s;
+    }
+    .edit-card.open .edit-card-head .head-chev { transform: rotate(90deg); }
+    .edit-card-body {
+      display: none;
+      padding: 14px 14px 18px;
+      border-top: 1px solid #1A1A1A;
+    }
+    .edit-card.open .edit-card-body { display: block; }
+    .edit-card-actions {
+      display: flex; justify-content: flex-end; margin-top: 14px;
+    }
+    button.delete {
+      background: none;
+      border: 1px solid #441111;
+      color: #884444;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      padding: 6px 14px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.15s;
+    }
+    button.delete:hover { background: #1a0808; color: #CC4444; border-color: #884444; }
+
+    /* ── ADD BUTTON ───────────────────────────────────────────────── */
+    button.add {
+      background: none;
+      border: 1px dashed #2A2A2A;
+      color: #666;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      padding: 12px 18px;
+      cursor: pointer;
+      text-transform: uppercase;
+      width: 100%;
+      margin-bottom: 24px;
+      transition: all 0.15s;
+    }
+    button.add:hover { color: #F0EDE8; border-color: #555; }
+
+    /* ── SIMPLE LIST EDITOR (eras, disciplines, clients) ──────────── */
+    .list-row {
+      display: flex; gap: 8px; margin-bottom: 6px;
+    }
+    .list-row input { flex: 1;
+      background: #111; border: 1px solid #1E1E1E; color: #F0EDE8;
+      font-family: 'Share Tech Mono', monospace; font-size: 12px;
+      padding: 7px 10px; outline: none;
+    }
+    .list-row input:focus { border-color: #444; }
+    .list-row button.x {
+      background: #111;
+      border: 1px solid #1E1E1E;
+      color: #666;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      padding: 0 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .list-row button.x:hover { color: #CC4444; border-color: #441111; }
+
+    /* ── SAVE BAR ─────────────────────────────────────────────────── */
+    #save-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 60px;
+      background: rgba(10, 10, 10, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-top: 1px solid #1A1A1A;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 40;
+    }
+    #save-bar button.save {
+      background: #F0EDE8;
+      color: #080808;
+      border: none;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      padding: 12px 28px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.15s;
+    }
+    #save-bar button.save:hover { background: #fff; }
+    #save-bar button.save:disabled { background: #333; color: #666; cursor: not-allowed; }
+    #save-bar .save-status {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px; letter-spacing: 0.18em;
+      color: #555;
+      text-transform: uppercase;
+    }
+
+    /* ── TOAST ─────────────────────────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 80px; left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: #1A1A1A;
+      border: 1px solid #333;
+      color: #F0EDE8;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      padding: 10px 22px;
+      z-index: 100;
+      opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      text-transform: uppercase;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    #toast.error { color: #CC4444; border-color: #441111; }
+    #toast.success { color: #00CC33; border-color: #115511; }
+  </style>
+</head>
+<body class="locked">
+
+  <!-- ── LOGIN SCREEN ───────────────────────────────────── -->
+  <div id="login">
+    <div class="login-eyebrow">ELS© Admin</div>
+    <div class="login-title">Restricted.</div>
+    <form id="login-form">
+      <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" autofocus>
+      <button type="submit">ENTER →</button>
+    </form>
+    <div class="login-error" id="login-error"></div>
+  </div>
+
+  <!-- ── ADMIN UI ───────────────────────────────────────── -->
+  <header id="admin-header" hidden>
+    <div class="brand">
+      <img src="assets/logoELS.svg" alt="ELS©">
+      <span>ADMIN</span>
+      <span class="live">· <a href="/" target="_blank">VIEW LIVE ↗</a></span>
+    </div>
+    <div class="right">
+      <span class="status" id="status"><span class="dot"></span>SAVED</span>
+      <button class="logout" id="logout">LOGOUT</button>
+    </div>
+  </header>
+
+  <nav id="tabs" hidden>
+    <button class="active" data-tab="films">Films</button>
+    <button data-tab="about">About</button>
+    <button data-tab="agencies">Agencies</button>
+    <button data-tab="meta">Socials &amp; Meta</button>
+  </nav>
+
+  <div id="content" hidden>
+    <section class="tab-pane" data-pane="films">
+      <div class="section-eyebrow">Eras (grouping for the Work page)</div>
+      <div id="eras-list"></div>
+      <button class="add" data-add="era">+ Add Era</button>
+
+      <div class="section-eyebrow" style="margin-top:32px">Films</div>
+      <div id="films-list"></div>
+      <button class="add" data-add="film">+ Add Film</button>
+    </section>
+
+    <section class="tab-pane" data-pane="about" hidden>
+      <div class="section-eyebrow">Hero (home page)</div>
+      <div class="field"><label>Title</label><input id="hero-title"></div>
+      <div class="field"><label>Subtitle</label><input id="hero-subtitle"></div>
+      <div class="field"><label>Location</label><input id="hero-location"></div>
+
+      <div class="section-eyebrow" style="margin-top:32px">Bio (one paragraph per entry · wrap key phrases in &lt;strong&gt;…&lt;/strong&gt;)</div>
+      <div id="bio-list"></div>
+      <button class="add" data-add="bio">+ Add Paragraph</button>
+
+      <div class="section-eyebrow" style="margin-top:32px">Disciplines</div>
+      <div id="disciplines-list"></div>
+      <button class="add" data-add="discipline">+ Add Discipline</button>
+
+      <div class="section-eyebrow" style="margin-top:32px">Selected Clients</div>
+      <div id="clients-list"></div>
+      <button class="add" data-add="client">+ Add Client</button>
+    </section>
+
+    <section class="tab-pane" data-pane="agencies" hidden>
+      <div class="section-eyebrow">Representation (shown on About + Contact)</div>
+      <div id="agencies-list"></div>
+      <button class="add" data-add="agency">+ Add Agency</button>
+    </section>
+
+    <section class="tab-pane" data-pane="meta" hidden>
+      <div class="section-eyebrow">Contact</div>
+      <div class="field"><label>Email</label><input id="meta-email" type="email"></div>
+
+      <div class="section-eyebrow" style="margin-top:32px">Socials</div>
+      <div class="field"><label>Instagram</label><input id="meta-instagram"></div>
+      <div class="field"><label>Vimeo</label><input id="meta-vimeo"></div>
+      <div class="field"><label>LinkedIn</label><input id="meta-linkedin"></div>
+
+      <div class="section-eyebrow" style="margin-top:32px">Footer</div>
+      <div class="field"><label>Copyright</label><input id="meta-copyright"></div>
+    </section>
+  </div>
+
+  <div id="save-bar" hidden>
+    <span class="save-status" id="save-status">No unsaved changes</span>
+    <button class="save" id="save-btn" disabled>Save All Changes</button>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+    // ─── State ──────────────────────────────────────────────────────────
+    const TOKEN_KEY = 'els_admin_token';
+    let data = null;
+    let dirty = false;
+
+    function $(id) { return document.getElementById(id); }
+    function token() { return localStorage.getItem(TOKEN_KEY) || ''; }
+    function setToken(t) { localStorage.setItem(TOKEN_KEY, t); }
+    function clearToken() { localStorage.removeItem(TOKEN_KEY); }
+
+    function toast(msg, kind) {
+      const el = $('toast');
+      el.textContent = msg;
+      el.className = '';
+      if (kind) el.classList.add(kind);
+      el.classList.add('show');
+      clearTimeout(toast._t);
+      toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+    }
+
+    function markDirty() {
+      dirty = true;
+      $('save-btn').disabled = false;
+      $('save-status').textContent = '● Unsaved changes';
+      $('status').className = 'status dirty';
+      $('status').innerHTML = '<span class="dot"></span>UNSAVED';
+    }
+    function markClean() {
+      dirty = false;
+      $('save-btn').disabled = true;
+      $('save-status').textContent = 'No unsaved changes';
+      $('status').className = 'status saved';
+      $('status').innerHTML = '<span class="dot"></span>SAVED';
+    }
+
+    // ─── Auth & Boot ────────────────────────────────────────────────────
+    async function attemptLoad() {
+      // Fetch data from the API (GET is public, no auth needed)
+      const res = await fetch('/api/data', { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to load data');
+      return res.json();
+    }
+
+    async function boot() {
+      try {
+        data = await attemptLoad();
+      } catch (e) {
+        toast('Failed to load data from server', 'error');
+        return;
+      }
+
+      // Show admin if we have a token; otherwise show login
+      if (token()) showAdmin();
+      else showLogin();
+    }
+
+    function showLogin() {
+      $('login').classList.remove('hide');
+      document.body.classList.add('locked');
+      ['admin-header', 'tabs', 'content', 'save-bar'].forEach(id => $(id).hidden = true);
+    }
+
+    function showAdmin() {
+      $('login').classList.add('hide');
+      document.body.classList.remove('locked');
+      ['admin-header', 'tabs', 'content', 'save-bar'].forEach(id => $(id).hidden = false);
+      renderAll();
+      markClean();
+    }
+
+    $('login-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const pw = $('login-password').value;
+      if (!pw) return;
+      // Validate by attempting a no-op save (POST same data we already have)
+      $('login-error').textContent = '';
+      const res = await fetch('/api/data', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + pw,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        setToken(pw);
+        showAdmin();
+      } else if (res.status === 401) {
+        $('login-error').textContent = 'Wrong password';
+      } else {
+        $('login-error').textContent = 'Server error (' + res.status + ')';
+      }
+    });
+
+    $('logout').addEventListener('click', () => {
+      if (dirty && !confirm('You have unsaved changes. Logout anyway?')) return;
+      clearToken();
+      $('login-password').value = '';
+      showLogin();
+    });
+
+    // ─── Tabs ───────────────────────────────────────────────────────────
+    document.querySelectorAll('#tabs button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#tabs button').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.querySelectorAll('.tab-pane').forEach(p => {
+          p.hidden = p.dataset.pane !== tab;
+        });
+      });
+    });
+
+    // ─── Render ─────────────────────────────────────────────────────────
+    function renderAll() {
+      renderEras();
+      renderFilms();
+      renderAbout();
+      renderAgencies();
+      renderMeta();
+    }
+
+    // — eras —
+    function renderEras() {
+      const root = $('eras-list');
+      root.innerHTML = data.eras.map((era, i) => `
+        <div class="edit-card open">
+          <div class="edit-card-body" style="border-top:none;padding:14px">
+            <div class="field"><label>ID</label><input data-era-field="id" data-i="${i}" value="${escapeAttr(era.id)}"></div>
+            <div class="field"><label>Label</label><input data-era-field="label" data-i="${i}" value="${escapeAttr(era.label)}"></div>
+            <div class="field"><label>Year</label><input data-era-field="year" data-i="${i}" type="number" value="${era.year}"></div>
+            <div class="edit-card-actions"><button class="delete" data-delete-era="${i}">Delete Era</button></div>
+          </div>
+        </div>
+      `).join('');
+      // Wire inputs
+      root.querySelectorAll('[data-era-field]').forEach(input => {
+        input.addEventListener('input', () => {
+          const i = +input.dataset.i, f = input.dataset.eraField;
+          data.eras[i][f] = f === 'year' ? +input.value : input.value;
+          markDirty();
+        });
+      });
+      root.querySelectorAll('[data-delete-era]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = +btn.dataset.deleteEra;
+          if (!confirm(`Delete era "${data.eras[i].label}"?`)) return;
+          data.eras.splice(i, 1);
+          renderEras(); renderFilms(); markDirty();
+        });
+      });
+    }
+
+    // — films —
+    function renderFilms() {
+      const root = $('films-list');
+      root.innerHTML = data.films.map((film, i) => {
+        const eraOptions = data.eras.map(e =>
+          `<option value="${escapeAttr(e.id)}"${e.id === film.era ? ' selected' : ''}>${escapeHtml(e.label)}</option>`
+        ).join('');
+        const catOptions = data.categories.filter(c => c.id !== 'all').map(c =>
+          `<option value="${escapeAttr(c.id)}"${c.id === film.category ? ' selected' : ''}>${escapeHtml(c.label)}</option>`
+        ).join('');
+        return `
+          <div class="edit-card" data-film-card="${i}">
+            <div class="edit-card-head" data-toggle="${i}">
+              <span class="grip">⠿</span>
+              <div class="head-thumb" style="background-image:url('${escapeAttr(film.thumb)}')"></div>
+              <div class="head-title">${escapeHtml(film.title) || '<em style="color:#444">(untitled)</em>'}</div>
+              <div class="head-meta">${escapeHtml(film.year)} · ${escapeHtml(film.category)}</div>
+              <span class="head-chev">▸</span>
+            </div>
+            <div class="edit-card-body">
+              <div class="field"><label>Title</label><input data-film-field="title" data-i="${i}" value="${escapeAttr(film.title)}"></div>
+              <div class="field"><label>Vimeo URL or ID</label>
+                <div class="with-button">
+                  <input data-film-field="vimeo" data-i="${i}" value="${escapeAttr(film.vimeo)}" placeholder="e.g. https://vimeo.com/1234567 or 1234567">
+                  <button class="aux" data-fetch-vimeo="${i}">Fetch from Vimeo</button>
+                </div>
+                <div class="field-hint">Click "Fetch" to auto-fill title + thumbnail from Vimeo.</div>
+              </div>
+              <div class="field"><label>Thumbnail URL</label><input data-film-field="thumb" data-i="${i}" value="${escapeAttr(film.thumb)}"></div>
+              <div class="field"><label>Year</label><input data-film-field="year" data-i="${i}" type="number" value="${film.year}"></div>
+              <div class="field"><label>Era</label><select data-film-field="era" data-i="${i}">${eraOptions}</select></div>
+              <div class="field"><label>Category</label><select data-film-field="category" data-i="${i}">${catOptions}</select></div>
+              <div class="field"><label>Agency</label><input data-film-field="agency" data-i="${i}" value="${escapeAttr(film.agency || '')}" placeholder="(optional)"></div>
+              <div class="field"><label>FPS</label><input data-film-field="fps" data-i="${i}" value="${escapeAttr(film.fps)}"></div>
+              <div class="field"><label>EI</label><input data-film-field="ei" data-i="${i}" value="${escapeAttr(film.ei)}"></div>
+              <div class="field"><label>Clip Code</label><input data-film-field="clip" data-i="${i}" value="${escapeAttr(film.clip)}"></div>
+              <div class="field"><label>Duration</label><input data-film-field="duration" data-i="${i}" value="${escapeAttr(film.duration)}"></div>
+              <div class="edit-card-actions"><button class="delete" data-delete-film="${i}">Delete Film</button></div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Wire toggles
+      root.querySelectorAll('[data-toggle]').forEach(head => {
+        head.addEventListener('click', e => {
+          if (e.target.closest('.grip')) return;
+          head.parentElement.classList.toggle('open');
+        });
+      });
+      // Wire inputs
+      root.querySelectorAll('[data-film-field]').forEach(input => {
+        input.addEventListener('input', () => {
+          const i = +input.dataset.i, f = input.dataset.filmField;
+          let v = input.value;
+          if (f === 'year') v = +v;
+          if (f === 'agency' && v === '') v = null;
+          data.films[i][f] = v;
+          // Update head title/thumb live
+          const head = input.closest('.edit-card').querySelector('.edit-card-head');
+          if (f === 'title') head.querySelector('.head-title').textContent = v || '(untitled)';
+          if (f === 'thumb') head.querySelector('.head-thumb').style.backgroundImage = `url('${v}')`;
+          if (f === 'year' || f === 'category') head.querySelector('.head-meta').textContent = `${data.films[i].year} · ${data.films[i].category}`;
+          markDirty();
+        });
+      });
+      // Wire delete
+      root.querySelectorAll('[data-delete-film]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = +btn.dataset.deleteFilm;
+          if (!confirm(`Delete film "${data.films[i].title}"?`)) return;
+          data.films.splice(i, 1);
+          renderFilms(); markDirty();
+        });
+      });
+      // Wire Vimeo fetch
+      root.querySelectorAll('[data-fetch-vimeo]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const i = +btn.dataset.fetchVimeo;
+          const input = root.querySelector(`[data-film-field=vimeo][data-i="${i}"]`);
+          const raw = input.value.trim();
+          if (!raw) { toast('Enter a Vimeo URL or ID first', 'error'); return; }
+          const id = (raw.match(/(\d{6,})/) || [])[1];
+          if (!id) { toast('Could not extract Vimeo ID', 'error'); return; }
+          btn.disabled = true; btn.textContent = 'Fetching…';
+          try {
+            const res = await fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=1920`);
+            if (!res.ok) throw new Error();
+            const meta = await res.json();
+            data.films[i].vimeo = id;
+            data.films[i].title = meta.title || data.films[i].title;
+            data.films[i].thumb = meta.thumbnail_url || data.films[i].thumb;
+            renderFilms();
+            toast('Fetched from Vimeo ✓', 'success');
+            markDirty();
+          } catch {
+            toast('Vimeo fetch failed', 'error');
+          } finally {
+            btn.disabled = false; btn.textContent = 'Fetch from Vimeo';
+          }
+        });
+      });
+    }
+
+    // — about (hero, bio, disciplines, clients) —
+    function renderAbout() {
+      $('hero-title').value = data.hero.title;
+      $('hero-subtitle').value = data.hero.subtitle;
+      $('hero-location').value = data.hero.location;
+      ['title','subtitle','location'].forEach(k => {
+        $('hero-' + k).oninput = e => { data.hero[k] = e.target.value; markDirty(); };
+      });
+
+      // Bio
+      const bio = $('bio-list');
+      bio.innerHTML = data.bio.map((p, i) =>
+        `<div class="list-row"><textarea data-bio="${i}" style="min-height:60px;background:#111;border:1px solid #1E1E1E;color:#F0EDE8;font-family:'Share Tech Mono',monospace;font-size:12px;padding:8px 10px;outline:none;width:100%">${escapeHtml(p)}</textarea><button class="x" data-bio-x="${i}">×</button></div>`
+      ).join('');
+      bio.querySelectorAll('[data-bio]').forEach(t => {
+        t.oninput = () => { data.bio[+t.dataset.bio] = t.value; markDirty(); };
+      });
+      bio.querySelectorAll('[data-bio-x]').forEach(b => {
+        b.onclick = () => { data.bio.splice(+b.dataset.bioX, 1); renderAbout(); markDirty(); };
+      });
+
+      // Disciplines
+      const disc = $('disciplines-list');
+      disc.innerHTML = data.disciplines.map((d, i) =>
+        `<div class="list-row"><input data-disc="${i}" value="${escapeAttr(d)}"><button class="x" data-disc-x="${i}">×</button></div>`
+      ).join('');
+      disc.querySelectorAll('[data-disc]').forEach(input => {
+        input.oninput = () => { data.disciplines[+input.dataset.disc] = input.value; markDirty(); };
+      });
+      disc.querySelectorAll('[data-disc-x]').forEach(b => {
+        b.onclick = () => { data.disciplines.splice(+b.dataset.discX, 1); renderAbout(); markDirty(); };
+      });
+
+      // Clients
+      const cl = $('clients-list');
+      cl.innerHTML = data.clients.map((c, i) =>
+        `<div class="list-row"><input data-cl="${i}" value="${escapeAttr(c)}"><button class="x" data-cl-x="${i}">×</button></div>`
+      ).join('');
+      cl.querySelectorAll('[data-cl]').forEach(input => {
+        input.oninput = () => { data.clients[+input.dataset.cl] = input.value; markDirty(); };
+      });
+      cl.querySelectorAll('[data-cl-x]').forEach(b => {
+        b.onclick = () => { data.clients.splice(+b.dataset.clX, 1); renderAbout(); markDirty(); };
+      });
+    }
+
+    // — agencies —
+    function renderAgencies() {
+      const root = $('agencies-list');
+      root.innerHTML = data.agencies.map((a, i) => `
+        <div class="edit-card open">
+          <div class="edit-card-body" style="border-top:none;padding:14px">
+            <div class="field"><label>Region</label><input data-ag-field="region" data-i="${i}" value="${escapeAttr(a.region)}"></div>
+            <div class="field"><label>Agency Name</label><input data-ag-field="name" data-i="${i}" value="${escapeAttr(a.name)}"></div>
+            <div class="field"><label>Contact Person</label><input data-ag-field="contact" data-i="${i}" value="${escapeAttr(a.contact || '')}" placeholder="(optional)"></div>
+            <div class="field"><label>Address (one line per row)</label><textarea data-ag-field="address" data-i="${i}">${escapeHtml((a.address || []).join('\n'))}</textarea></div>
+            <div class="field"><label>Emails (one per row)</label><textarea data-ag-field="emails" data-i="${i}">${escapeHtml((a.emails || []).join('\n'))}</textarea></div>
+            <div class="edit-card-actions"><button class="delete" data-delete-ag="${i}">Delete Agency</button></div>
+          </div>
+        </div>
+      `).join('');
+      root.querySelectorAll('[data-ag-field]').forEach(input => {
+        input.addEventListener('input', () => {
+          const i = +input.dataset.i, f = input.dataset.agField;
+          let v = input.value;
+          if (f === 'address' || f === 'emails') v = v.split('\n').map(s => s.trim()).filter(Boolean);
+          if (f === 'contact' && v === '') v = null;
+          data.agencies[i][f] = v;
+          markDirty();
+        });
+      });
+      root.querySelectorAll('[data-delete-ag]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const i = +btn.dataset.deleteAg;
+          if (!confirm(`Delete agency "${data.agencies[i].name}"?`)) return;
+          data.agencies.splice(i, 1);
+          renderAgencies(); markDirty();
+        });
+      });
+    }
+
+    // — meta —
+    function renderMeta() {
+      $('meta-email').value = data.email;
+      $('meta-instagram').value = data.socials.instagram;
+      $('meta-vimeo').value = data.socials.vimeo;
+      $('meta-linkedin').value = data.socials.linkedin;
+      $('meta-copyright').value = data.copyright;
+      $('meta-email').oninput = e => { data.email = e.target.value; markDirty(); };
+      $('meta-instagram').oninput = e => { data.socials.instagram = e.target.value; markDirty(); };
+      $('meta-vimeo').oninput = e => { data.socials.vimeo = e.target.value; markDirty(); };
+      $('meta-linkedin').oninput = e => { data.socials.linkedin = e.target.value; markDirty(); };
+      $('meta-copyright').oninput = e => { data.copyright = e.target.value; markDirty(); };
+    }
+
+    // ─── Add buttons ────────────────────────────────────────────────────
+    document.querySelectorAll('[data-add]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const kind = btn.dataset.add;
+        if (kind === 'era')        data.eras.push({ id: 'era-' + (data.eras.length + 1), label: 'New Era', year: new Date().getFullYear() });
+        if (kind === 'film')       data.films.push({ id: 'film-' + Date.now(), title: '', year: new Date().getFullYear(), era: data.eras[0]?.id || '', category: 'commercial', agency: null, vimeo: '', thumb: '', fps: '23.976', ei: '800', clip: 'A000C000', duration: '0:00' });
+        if (kind === 'bio')        data.bio.push('');
+        if (kind === 'discipline') data.disciplines.push('');
+        if (kind === 'client')     data.clients.push('');
+        if (kind === 'agency')     data.agencies.push({ region: '', name: '', contact: null, address: [], emails: [] });
+        renderAll();
+        markDirty();
+      });
+    });
+
+    // ─── Save ───────────────────────────────────────────────────────────
+    $('save-btn').addEventListener('click', async () => {
+      const btn = $('save-btn');
+      btn.disabled = true;
+      $('save-status').textContent = 'Saving…';
+      try {
+        const res = await fetch('/api/data', {
+          method: 'POST',
+          headers: { 'Authorization': 'Bearer ' + token(), 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        if (res.status === 401) {
+          clearToken();
+          toast('Session expired — please log in again', 'error');
+          showLogin();
+          return;
+        }
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        markClean();
+        toast('Saved ✓', 'success');
+      } catch (e) {
+        toast('Save failed: ' + e.message, 'error');
+        btn.disabled = false;
+        $('save-status').textContent = '● Unsaved changes';
+      }
+    });
+
+    // Warn on close
+    window.addEventListener('beforeunload', e => {
+      if (dirty) { e.preventDefault(); e.returnValue = ''; }
+    });
+
+    // ─── Helpers ────────────────────────────────────────────────────────
+    function escapeHtml(s) {
+      return String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    }
+    function escapeAttr(s) { return escapeHtml(s); }
+
+    // ─── Go ─────────────────────────────────────────────────────────────
+    boot();
+  </script>
+</body>
+</html>
