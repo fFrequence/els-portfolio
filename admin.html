@@ -113,6 +113,26 @@
     }
     #admin-header button.logout:hover { color: #F0EDE8; }
 
+    #admin-header .lang-switch {
+      display: inline-flex;
+      gap: 2px;
+      border: 1px solid #2A2A2A;
+      padding: 2px;
+    }
+    #admin-header .lang-btn {
+      background: none;
+      border: none;
+      color: #555;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      padding: 4px 8px;
+      cursor: pointer;
+      transition: color 0.15s, background 0.15s;
+    }
+    #admin-header .lang-btn:hover { color: #888; }
+    #admin-header .lang-btn.active { color: #080808; background: #F0EDE8; }
+
     /* ── TABS ─────────────────────────────────────────────────────── */
     #tabs {
       position: sticky;
@@ -386,93 +406,340 @@
 
   <!-- ── LOGIN SCREEN ───────────────────────────────────── -->
   <div id="login">
-    <div class="login-eyebrow">ELS© Admin</div>
-    <div class="login-title">Restricted.</div>
+    <div class="login-eyebrow" data-i18n="login_eyebrow">ELS© Admin</div>
+    <div class="login-title" data-i18n="login_title">Restricted.</div>
     <form id="login-form">
-      <input type="password" id="login-password" placeholder="Password" autocomplete="current-password" autofocus>
-      <button type="submit">ENTER →</button>
+      <input type="password" id="login-password" data-i18n-placeholder="login_password" placeholder="Password" autocomplete="current-password" autofocus>
+      <button type="submit" data-i18n="login_enter">ENTER →</button>
     </form>
     <div class="login-error" id="login-error"></div>
+    <div class="lang-switch" style="margin-top:24px">
+      <button class="lang-btn" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="fr">FR</button>
+    </div>
   </div>
 
   <!-- ── ADMIN UI ───────────────────────────────────────── -->
   <header id="admin-header" hidden>
     <div class="brand">
       <img src="assets/logoELS.svg" alt="ELS©">
-      <span>ADMIN</span>
-      <span class="live">· <a href="/" target="_blank">VIEW LIVE ↗</a></span>
+      <span data-i18n="admin_label">ADMIN</span>
+      <span class="live">· <a href="/" target="_blank" data-i18n="view_live">VIEW LIVE ↗</a></span>
     </div>
     <div class="right">
+      <span class="lang-switch">
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="fr">FR</button>
+      </span>
       <span class="status" id="status"><span class="dot"></span>SAVED</span>
-      <button class="logout" id="logout">LOGOUT</button>
+      <button class="logout" id="logout" data-i18n="logout">LOGOUT</button>
     </div>
   </header>
 
   <nav id="tabs" hidden>
-    <button class="active" data-tab="films">Films</button>
-    <button data-tab="about">About</button>
-    <button data-tab="agencies">Agencies</button>
-    <button data-tab="meta">Socials &amp; Meta</button>
+    <button class="active" data-tab="films" data-i18n="tab_films">Films</button>
+    <button data-tab="about" data-i18n="tab_about">About</button>
+    <button data-tab="agencies" data-i18n="tab_agencies">Agencies</button>
+    <button data-tab="meta" data-i18n="tab_meta">Socials &amp; Meta</button>
   </nav>
 
   <div id="content" hidden>
     <section class="tab-pane" data-pane="films">
-      <div class="section-eyebrow">Eras (grouping for the Work page)</div>
+      <div class="section-eyebrow" data-i18n="eras_eyebrow">Eras (grouping for the Work page)</div>
       <div id="eras-list"></div>
-      <button class="add" data-add="era">+ Add Era</button>
+      <button class="add" data-add="era" data-i18n="add_era">+ Add Era</button>
 
-      <div class="section-eyebrow" style="margin-top:32px">Films</div>
+      <div class="section-eyebrow" style="margin-top:32px" data-i18n="films_eyebrow">Films</div>
       <div id="films-list"></div>
-      <button class="add" data-add="film">+ Add Film</button>
+      <button class="add" data-add="film" data-i18n="add_film">+ Add Film</button>
     </section>
 
     <section class="tab-pane" data-pane="about" hidden>
-      <div class="section-eyebrow">Hero (home page)</div>
-      <div class="field"><label>Title</label><input id="hero-title"></div>
-      <div class="field"><label>Subtitle</label><input id="hero-subtitle"></div>
-      <div class="field"><label>Location</label><input id="hero-location"></div>
+      <div class="section-eyebrow" data-i18n="hero_eyebrow">Hero (home page)</div>
+      <div class="field"><label data-i18n="f_title">Title</label><input id="hero-title"></div>
+      <div class="field"><label data-i18n="f_subtitle">Subtitle</label><input id="hero-subtitle"></div>
+      <div class="field"><label data-i18n="f_location">Location</label><input id="hero-location"></div>
 
-      <div class="section-eyebrow" style="margin-top:32px">Bio (one paragraph per entry · wrap key phrases in &lt;strong&gt;…&lt;/strong&gt;)</div>
+      <div class="section-eyebrow" style="margin-top:32px" data-i18n="bio_eyebrow">Bio (one paragraph per entry · wrap key phrases in &lt;strong&gt;…&lt;/strong&gt;)</div>
       <div id="bio-list"></div>
-      <button class="add" data-add="bio">+ Add Paragraph</button>
+      <button class="add" data-add="bio" data-i18n="add_paragraph">+ Add Paragraph</button>
 
-      <div class="section-eyebrow" style="margin-top:32px">Disciplines</div>
+      <div class="section-eyebrow" style="margin-top:32px" data-i18n="disciplines_eyebrow">Disciplines</div>
       <div id="disciplines-list"></div>
-      <button class="add" data-add="discipline">+ Add Discipline</button>
+      <button class="add" data-add="discipline" data-i18n="add_discipline">+ Add Discipline</button>
 
-      <div class="section-eyebrow" style="margin-top:32px">Selected Clients</div>
+      <div class="section-eyebrow" style="margin-top:32px" data-i18n="clients_eyebrow">Selected Clients</div>
       <div id="clients-list"></div>
-      <button class="add" data-add="client">+ Add Client</button>
+      <button class="add" data-add="client" data-i18n="add_client">+ Add Client</button>
     </section>
 
     <section class="tab-pane" data-pane="agencies" hidden>
-      <div class="section-eyebrow">Representation (shown on About + Contact)</div>
+      <div class="section-eyebrow" data-i18n="agencies_eyebrow">Representation (shown on About + Contact)</div>
       <div id="agencies-list"></div>
-      <button class="add" data-add="agency">+ Add Agency</button>
+      <button class="add" data-add="agency" data-i18n="add_agency">+ Add Agency</button>
     </section>
 
     <section class="tab-pane" data-pane="meta" hidden>
-      <div class="section-eyebrow">Contact</div>
-      <div class="field"><label>Email</label><input id="meta-email" type="email"></div>
+      <div class="section-eyebrow" data-i18n="contact_eyebrow">Contact</div>
+      <div class="field"><label data-i18n="f_email">Email</label><input id="meta-email" type="email"></div>
 
-      <div class="section-eyebrow" style="margin-top:32px">Socials</div>
-      <div class="field"><label>Instagram</label><input id="meta-instagram"></div>
-      <div class="field"><label>Vimeo</label><input id="meta-vimeo"></div>
-      <div class="field"><label>LinkedIn</label><input id="meta-linkedin"></div>
+      <div class="section-eyebrow" style="margin-top:32px" data-i18n="socials_eyebrow">Socials</div>
+      <div class="field"><label data-i18n="f_instagram">Instagram</label><input id="meta-instagram"></div>
+      <div class="field"><label data-i18n="f_vimeo_link">Vimeo</label><input id="meta-vimeo"></div>
+      <div class="field"><label data-i18n="f_linkedin">LinkedIn</label><input id="meta-linkedin"></div>
 
-      <div class="section-eyebrow" style="margin-top:32px">Footer</div>
-      <div class="field"><label>Copyright</label><input id="meta-copyright"></div>
+      <div class="section-eyebrow" style="margin-top:32px" data-i18n="footer_eyebrow">Footer</div>
+      <div class="field"><label data-i18n="f_copyright">Copyright</label><input id="meta-copyright"></div>
     </section>
   </div>
 
   <div id="save-bar" hidden>
     <span class="save-status" id="save-status">No unsaved changes</span>
-    <button class="save" id="save-btn" disabled>Save All Changes</button>
+    <button class="save" id="save-btn" data-i18n="btn_save" disabled>Save All Changes</button>
   </div>
 
   <div id="toast"></div>
 
   <script>
+    // ─── i18n ───────────────────────────────────────────────────────────
+    const LANG_KEY = 'els_admin_lang';
+    const SUPPORTED_LANGS = ['en', 'fr'];
+    const TRANSLATIONS = {
+      en: {
+        // Login
+        login_eyebrow:        'ELS© Admin',
+        login_title:          'Restricted.',
+        login_password:       'Password',
+        login_enter:          'ENTER →',
+        login_wrong:          'Wrong password',
+        login_server_error:   'Server error',
+
+        // Header
+        admin_label:          'ADMIN',
+        view_live:            'VIEW LIVE ↗',
+        logout:               'LOGOUT',
+        status_saved:         'SAVED',
+        status_unsaved:       'UNSAVED',
+
+        // Tabs
+        tab_films:            'Films',
+        tab_about:            'About',
+        tab_agencies:         'Agencies',
+        tab_meta:             'Socials & Meta',
+
+        // Section eyebrows
+        eras_eyebrow:         'Eras (grouping for the Work page)',
+        films_eyebrow:        'Films',
+        hero_eyebrow:         'Hero (home page)',
+        bio_eyebrow:          'Bio (one paragraph per entry · wrap key phrases in <strong>…</strong>)',
+        disciplines_eyebrow:  'Disciplines',
+        clients_eyebrow:      'Selected Clients',
+        agencies_eyebrow:     'Representation (shown on About + Contact)',
+        contact_eyebrow:      'Contact',
+        socials_eyebrow:      'Socials',
+        footer_eyebrow:       'Footer',
+
+        // Add buttons
+        add_era:              '+ Add Era',
+        add_film:             '+ Add Film',
+        add_paragraph:        '+ Add Paragraph',
+        add_discipline:       '+ Add Discipline',
+        add_client:           '+ Add Client',
+        add_agency:           '+ Add Agency',
+
+        // Field labels
+        f_id:                 'ID',
+        f_label:              'Label',
+        f_year:               'Year',
+        f_title:              'Title',
+        f_subtitle:           'Subtitle',
+        f_location:           'Location',
+        f_vimeo:              'Vimeo URL or ID',
+        f_vimeo_placeholder:  'e.g. https://vimeo.com/1234567 or 1234567',
+        f_vimeo_hint:         'Click "Fetch" to auto-fill title + thumbnail from Vimeo.',
+        f_thumb:              'Thumbnail URL',
+        f_era:                'Era',
+        f_category:           'Category',
+        f_agency:             'Agency',
+        f_optional:           '(optional)',
+        f_fps:                'FPS',
+        f_ei:                 'EI',
+        f_clip:               'Clip Code',
+        f_duration:           'Duration',
+        f_region:             'Region',
+        f_agency_name:        'Agency Name',
+        f_contact:            'Contact Person',
+        f_address:            'Address (one line per row)',
+        f_emails:             'Emails (one per row)',
+        f_email:              'Email',
+        f_instagram:          'Instagram',
+        f_vimeo_link:         'Vimeo',
+        f_linkedin:           'LinkedIn',
+        f_copyright:          'Copyright',
+
+        // Buttons
+        btn_fetch_vimeo:      'Fetch from Vimeo',
+        btn_fetching:         'Fetching…',
+        btn_delete_film:      'Delete Film',
+        btn_delete_era:       'Delete Era',
+        btn_delete_agency:    'Delete Agency',
+        btn_save:             'Save All Changes',
+        btn_saving:           'Saving…',
+
+        // Save bar status
+        status_clean:         'No unsaved changes',
+        status_dirty:         '● Unsaved changes',
+
+        // Placeholders for empty/untitled
+        untitled:             '(untitled)',
+        unnamed:              '(unnamed)',
+
+        // Toasts
+        toast_saved:          'Saved ✓',
+        toast_save_failed:    'Save failed',
+        toast_session_expired:'Session expired — please log in again',
+        toast_load_failed:    'Failed to load data from server',
+        toast_vimeo_need_id:  'Enter a Vimeo URL or ID first',
+        toast_vimeo_no_id:    'Could not extract Vimeo ID',
+        toast_vimeo_failed:   'Vimeo fetch failed',
+        toast_vimeo_fetched:  'Fetched from Vimeo ✓',
+
+        // Confirms (use {{name}} for substitution)
+        confirm_delete_film:  'Delete film "{{name}}"?',
+        confirm_delete_era:   'Delete era "{{name}}"?',
+        confirm_delete_agency:'Delete agency "{{name}}"?',
+        confirm_logout_dirty: 'You have unsaved changes. Logout anyway?'
+      },
+      fr: {
+        login_eyebrow:        'ELS© Admin',
+        login_title:          'Accès restreint.',
+        login_password:       'Mot de passe',
+        login_enter:          'ENTRER →',
+        login_wrong:          'Mot de passe incorrect',
+        login_server_error:   'Erreur serveur',
+
+        admin_label:          'ADMIN',
+        view_live:            'VOIR LE SITE ↗',
+        logout:               'DÉCONNEXION',
+        status_saved:         'ENREGISTRÉ',
+        status_unsaved:       'NON ENREGISTRÉ',
+
+        tab_films:            'Films',
+        tab_about:            'À propos',
+        tab_agencies:         'Agences',
+        tab_meta:             'Réseaux & Méta',
+
+        eras_eyebrow:         'Époques (regroupement pour la page Work)',
+        films_eyebrow:        'Films',
+        hero_eyebrow:         'Accueil',
+        bio_eyebrow:          'Bio (un paragraphe par entrée · encadrer les expressions clés avec <strong>…</strong>)',
+        disciplines_eyebrow:  'Disciplines',
+        clients_eyebrow:      'Clients sélectionnés',
+        agencies_eyebrow:     'Représentation (affichée sur À propos + Contact)',
+        contact_eyebrow:      'Contact',
+        socials_eyebrow:      'Réseaux',
+        footer_eyebrow:       'Pied de page',
+
+        add_era:              '+ Ajouter une époque',
+        add_film:             '+ Ajouter un film',
+        add_paragraph:        '+ Ajouter un paragraphe',
+        add_discipline:       '+ Ajouter une discipline',
+        add_client:           '+ Ajouter un client',
+        add_agency:           '+ Ajouter une agence',
+
+        f_id:                 'ID',
+        f_label:              'Libellé',
+        f_year:               'Année',
+        f_title:              'Titre',
+        f_subtitle:           'Sous-titre',
+        f_location:           'Lieu',
+        f_vimeo:              'URL ou ID Vimeo',
+        f_vimeo_placeholder:  'ex : https://vimeo.com/1234567 ou 1234567',
+        f_vimeo_hint:         'Cliquer sur « Récupérer » pour pré-remplir titre + vignette depuis Vimeo.',
+        f_thumb:              'URL de la vignette',
+        f_era:                'Époque',
+        f_category:           'Catégorie',
+        f_agency:             'Agence',
+        f_optional:           '(optionnel)',
+        f_fps:                'FPS',
+        f_ei:                 'EI',
+        f_clip:               'Code Clip',
+        f_duration:           'Durée',
+        f_region:             'Région',
+        f_agency_name:        "Nom de l'agence",
+        f_contact:            'Contact',
+        f_address:            'Adresse (une ligne par rangée)',
+        f_emails:             'Emails (un par rangée)',
+        f_email:              'Email',
+        f_instagram:          'Instagram',
+        f_vimeo_link:         'Vimeo',
+        f_linkedin:           'LinkedIn',
+        f_copyright:          'Copyright',
+
+        btn_fetch_vimeo:      'Récupérer depuis Vimeo',
+        btn_fetching:         'Récupération…',
+        btn_delete_film:      'Supprimer le film',
+        btn_delete_era:       "Supprimer l'époque",
+        btn_delete_agency:    "Supprimer l'agence",
+        btn_save:             'Tout enregistrer',
+        btn_saving:           'Enregistrement…',
+
+        status_clean:         'Aucune modification',
+        status_dirty:         '● Modifications non enregistrées',
+
+        untitled:             '(sans titre)',
+        unnamed:              '(sans nom)',
+
+        toast_saved:          'Enregistré ✓',
+        toast_save_failed:    "Échec de l'enregistrement",
+        toast_session_expired:'Session expirée — veuillez vous reconnecter',
+        toast_load_failed:    'Impossible de charger les données',
+        toast_vimeo_need_id:  "Saisir d'abord une URL ou un ID Vimeo",
+        toast_vimeo_no_id:    "Impossible d'extraire l'ID Vimeo",
+        toast_vimeo_failed:   'Échec de récupération Vimeo',
+        toast_vimeo_fetched:  'Récupéré depuis Vimeo ✓',
+
+        confirm_delete_film:  'Supprimer le film « {{name}} » ?',
+        confirm_delete_era:   "Supprimer l'époque « {{name}} » ?",
+        confirm_delete_agency:"Supprimer l'agence « {{name}} » ?",
+        confirm_logout_dirty: 'Vous avez des modifications non enregistrées. Se déconnecter quand même ?'
+      }
+    };
+
+    let LANG = SUPPORTED_LANGS.includes(localStorage.getItem(LANG_KEY)) ? localStorage.getItem(LANG_KEY) : 'en';
+
+    function t(key, params) {
+      const dict = TRANSLATIONS[LANG] || TRANSLATIONS.en;
+      let s = (key in dict) ? dict[key] : (TRANSLATIONS.en[key] || key);
+      if (params) Object.keys(params).forEach(k => { s = s.replace(new RegExp('{{'+k+'}}','g'), params[k]); });
+      return s;
+    }
+
+    function setLang(lang) {
+      if (!SUPPORTED_LANGS.includes(lang)) return;
+      LANG = lang;
+      localStorage.setItem(LANG_KEY, lang);
+      applyStaticTranslations();
+      // Update language toggle buttons + re-render dynamic content
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+      if (data) renderAll();
+      // Refresh status text since it's not a data-i18n element (it has the dot too)
+      if (typeof dirty !== 'undefined') (dirty ? markDirty : markClean)();
+    }
+
+    // Walks the DOM and updates text/placeholder/value of every element with a data-i18n* attribute
+    function applyStaticTranslations() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.innerHTML = t(el.dataset.i18n);
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = t(el.dataset.i18nPlaceholder);
+      });
+      document.querySelectorAll('[data-i18n-value]').forEach(el => {
+        el.value = t(el.dataset.i18nValue);
+      });
+    }
+
     // ─── State ──────────────────────────────────────────────────────────
     const TOKEN_KEY = 'els_admin_token';
     let data = null;
@@ -496,16 +763,16 @@
     function markDirty() {
       dirty = true;
       $('save-btn').disabled = false;
-      $('save-status').textContent = '● Unsaved changes';
+      $('save-status').textContent = t('status_dirty');
       $('status').className = 'status dirty';
-      $('status').innerHTML = '<span class="dot"></span>UNSAVED';
+      $('status').innerHTML = '<span class="dot"></span>' + t('status_unsaved');
     }
     function markClean() {
       dirty = false;
       $('save-btn').disabled = true;
-      $('save-status').textContent = 'No unsaved changes';
+      $('save-status').textContent = t('status_clean');
       $('status').className = 'status saved';
-      $('status').innerHTML = '<span class="dot"></span>SAVED';
+      $('status').innerHTML = '<span class="dot"></span>' + t('status_saved');
     }
 
     // ─── Auth & Boot ────────────────────────────────────────────────────
@@ -520,7 +787,7 @@
       try {
         data = await attemptLoad();
       } catch (e) {
-        toast('Failed to load data from server', 'error');
+        toast(t('toast_load_failed'), 'error');
         return;
       }
 
@@ -620,14 +887,14 @@
         setToken(pw);
         showAdmin();
       } else if (res.status === 401) {
-        $('login-error').textContent = 'Wrong password';
+        $('login-error').textContent = t('login_wrong');
       } else {
-        $('login-error').textContent = 'Server error (' + res.status + ')';
+        $('login-error').textContent = t('login_server_error') + ' (' + res.status + ')';
       }
     });
 
     $('logout').addEventListener('click', () => {
-      if (dirty && !confirm('You have unsaved changes. Logout anyway?')) return;
+      if (dirty && !confirm(t('confirm_logout_dirty'))) return;
       clearToken();
       $('login-password').value = '';
       showLogin();
@@ -661,14 +928,14 @@
         <div class="edit-card open" data-card-idx="${i}">
           <div class="edit-card-head" style="cursor:default">
             <span class="grip">⠿</span>
-            <div class="head-title">${escapeHtml(era.label) || '<em style="color:#444">(unnamed)</em>'}</div>
+            <div class="head-title">${escapeHtml(era.label) || '<em style="color:#444">' + t('unnamed') + '</em>'}</div>
             <div class="head-meta">// ${era.year}</div>
           </div>
           <div class="edit-card-body">
-            <div class="field"><label>ID</label><input data-era-field="id" data-i="${i}" value="${escapeAttr(era.id)}"></div>
-            <div class="field"><label>Label</label><input data-era-field="label" data-i="${i}" value="${escapeAttr(era.label)}"></div>
-            <div class="field"><label>Year</label><input data-era-field="year" data-i="${i}" type="number" value="${era.year}"></div>
-            <div class="edit-card-actions"><button class="delete" data-delete-era="${i}">Delete Era</button></div>
+            <div class="field"><label>${t('f_id')}</label><input data-era-field="id" data-i="${i}" value="${escapeAttr(era.id)}"></div>
+            <div class="field"><label>${t('f_label')}</label><input data-era-field="label" data-i="${i}" value="${escapeAttr(era.label)}"></div>
+            <div class="field"><label>${t('f_year')}</label><input data-era-field="year" data-i="${i}" type="number" value="${era.year}"></div>
+            <div class="edit-card-actions"><button class="delete" data-delete-era="${i}">${t('btn_delete_era')}</button></div>
           </div>
         </div>
       `).join('');
@@ -683,7 +950,7 @@
       root.querySelectorAll('[data-delete-era]').forEach(btn => {
         btn.addEventListener('click', () => {
           const i = +btn.dataset.deleteEra;
-          if (!confirm(`Delete era "${data.eras[i].label}"?`)) return;
+          if (!confirm(t('confirm_delete_era', { name: data.eras[i].label }))) return;
           data.eras.splice(i, 1);
           renderEras(); renderFilms(); markDirty();
         });
@@ -705,29 +972,29 @@
             <div class="edit-card-head" data-toggle="${i}">
               <span class="grip">⠿</span>
               <div class="head-thumb" style="background-image:url('${escapeAttr(film.thumb)}')"></div>
-              <div class="head-title">${escapeHtml(film.title) || '<em style="color:#444">(untitled)</em>'}</div>
+              <div class="head-title">${escapeHtml(film.title) || '<em style="color:#444">' + t('untitled') + '</em>'}</div>
               <div class="head-meta">${escapeHtml(film.year)} · ${escapeHtml(film.category)}</div>
               <span class="head-chev">▸</span>
             </div>
             <div class="edit-card-body">
-              <div class="field"><label>Title</label><input data-film-field="title" data-i="${i}" value="${escapeAttr(film.title)}"></div>
-              <div class="field"><label>Vimeo URL or ID</label>
+              <div class="field"><label>${t('f_title')}</label><input data-film-field="title" data-i="${i}" value="${escapeAttr(film.title)}"></div>
+              <div class="field"><label>${t('f_vimeo')}</label>
                 <div class="with-button">
-                  <input data-film-field="vimeo" data-i="${i}" value="${escapeAttr(film.vimeo)}" placeholder="e.g. https://vimeo.com/1234567 or 1234567">
-                  <button class="aux" data-fetch-vimeo="${i}">Fetch from Vimeo</button>
+                  <input data-film-field="vimeo" data-i="${i}" value="${escapeAttr(film.vimeo)}" placeholder="${escapeAttr(t('f_vimeo_placeholder'))}">
+                  <button class="aux" data-fetch-vimeo="${i}">${t('btn_fetch_vimeo')}</button>
                 </div>
-                <div class="field-hint">Click "Fetch" to auto-fill title + thumbnail from Vimeo.</div>
+                <div class="field-hint">${t('f_vimeo_hint')}</div>
               </div>
-              <div class="field"><label>Thumbnail URL</label><input data-film-field="thumb" data-i="${i}" value="${escapeAttr(film.thumb)}"></div>
-              <div class="field"><label>Year</label><input data-film-field="year" data-i="${i}" type="number" value="${film.year}"></div>
-              <div class="field"><label>Era</label><select data-film-field="era" data-i="${i}">${eraOptions}</select></div>
-              <div class="field"><label>Category</label><select data-film-field="category" data-i="${i}">${catOptions}</select></div>
-              <div class="field"><label>Agency</label><input data-film-field="agency" data-i="${i}" value="${escapeAttr(film.agency || '')}" placeholder="(optional)"></div>
-              <div class="field"><label>FPS</label><input data-film-field="fps" data-i="${i}" value="${escapeAttr(film.fps)}"></div>
-              <div class="field"><label>EI</label><input data-film-field="ei" data-i="${i}" value="${escapeAttr(film.ei)}"></div>
-              <div class="field"><label>Clip Code</label><input data-film-field="clip" data-i="${i}" value="${escapeAttr(film.clip)}"></div>
-              <div class="field"><label>Duration</label><input data-film-field="duration" data-i="${i}" value="${escapeAttr(film.duration)}"></div>
-              <div class="edit-card-actions"><button class="delete" data-delete-film="${i}">Delete Film</button></div>
+              <div class="field"><label>${t('f_thumb')}</label><input data-film-field="thumb" data-i="${i}" value="${escapeAttr(film.thumb)}"></div>
+              <div class="field"><label>${t('f_year')}</label><input data-film-field="year" data-i="${i}" type="number" value="${film.year}"></div>
+              <div class="field"><label>${t('f_era')}</label><select data-film-field="era" data-i="${i}">${eraOptions}</select></div>
+              <div class="field"><label>${t('f_category')}</label><select data-film-field="category" data-i="${i}">${catOptions}</select></div>
+              <div class="field"><label>${t('f_agency')}</label><input data-film-field="agency" data-i="${i}" value="${escapeAttr(film.agency || '')}" placeholder="${escapeAttr(t('f_optional'))}"></div>
+              <div class="field"><label>${t('f_fps')}</label><input data-film-field="fps" data-i="${i}" value="${escapeAttr(film.fps)}"></div>
+              <div class="field"><label>${t('f_ei')}</label><input data-film-field="ei" data-i="${i}" value="${escapeAttr(film.ei)}"></div>
+              <div class="field"><label>${t('f_clip')}</label><input data-film-field="clip" data-i="${i}" value="${escapeAttr(film.clip)}"></div>
+              <div class="field"><label>${t('f_duration')}</label><input data-film-field="duration" data-i="${i}" value="${escapeAttr(film.duration)}"></div>
+              <div class="edit-card-actions"><button class="delete" data-delete-film="${i}">${t('btn_delete_film')}</button></div>
             </div>
           </div>
         `;
@@ -750,7 +1017,7 @@
           data.films[i][f] = v;
           // Update head title/thumb live
           const head = input.closest('.edit-card').querySelector('.edit-card-head');
-          if (f === 'title') head.querySelector('.head-title').textContent = v || '(untitled)';
+          if (f === 'title') head.querySelector('.head-title').textContent = v || t('untitled');
           if (f === 'thumb') head.querySelector('.head-thumb').style.backgroundImage = `url('${v}')`;
           if (f === 'year' || f === 'category') head.querySelector('.head-meta').textContent = `${data.films[i].year} · ${data.films[i].category}`;
           markDirty();
@@ -760,7 +1027,7 @@
       root.querySelectorAll('[data-delete-film]').forEach(btn => {
         btn.addEventListener('click', () => {
           const i = +btn.dataset.deleteFilm;
-          if (!confirm(`Delete film "${data.films[i].title}"?`)) return;
+          if (!confirm(t('confirm_delete_film', { name: data.films[i].title }))) return;
           data.films.splice(i, 1);
           renderFilms(); markDirty();
         });
@@ -771,10 +1038,10 @@
           const i = +btn.dataset.fetchVimeo;
           const input = root.querySelector(`[data-film-field=vimeo][data-i="${i}"]`);
           const raw = input.value.trim();
-          if (!raw) { toast('Enter a Vimeo URL or ID first', 'error'); return; }
+          if (!raw) { toast(t('toast_vimeo_need_id'), 'error'); return; }
           const id = (raw.match(/(\d{6,})/) || [])[1];
-          if (!id) { toast('Could not extract Vimeo ID', 'error'); return; }
-          btn.disabled = true; btn.textContent = 'Fetching…';
+          if (!id) { toast(t('toast_vimeo_no_id'), 'error'); return; }
+          btn.disabled = true; btn.textContent = t('btn_fetching');
           try {
             const res = await fetch(`https://vimeo.com/api/oembed.json?url=https://vimeo.com/${id}&width=1920`);
             if (!res.ok) throw new Error();
@@ -783,12 +1050,12 @@
             data.films[i].title = meta.title || data.films[i].title;
             data.films[i].thumb = meta.thumbnail_url || data.films[i].thumb;
             renderFilms();
-            toast('Fetched from Vimeo ✓', 'success');
+            toast(t('toast_vimeo_fetched'), 'success');
             markDirty();
           } catch {
-            toast('Vimeo fetch failed', 'error');
+            toast(t('toast_vimeo_failed'), 'error');
           } finally {
-            btn.disabled = false; btn.textContent = 'Fetch from Vimeo';
+            btn.disabled = false; btn.textContent = t('btn_fetch_vimeo');
           }
         });
       });
@@ -846,12 +1113,12 @@
       root.innerHTML = data.agencies.map((a, i) => `
         <div class="edit-card open">
           <div class="edit-card-body" style="border-top:none;padding:14px">
-            <div class="field"><label>Region</label><input data-ag-field="region" data-i="${i}" value="${escapeAttr(a.region)}"></div>
-            <div class="field"><label>Agency Name</label><input data-ag-field="name" data-i="${i}" value="${escapeAttr(a.name)}"></div>
-            <div class="field"><label>Contact Person</label><input data-ag-field="contact" data-i="${i}" value="${escapeAttr(a.contact || '')}" placeholder="(optional)"></div>
-            <div class="field"><label>Address (one line per row)</label><textarea data-ag-field="address" data-i="${i}">${escapeHtml((a.address || []).join('\n'))}</textarea></div>
-            <div class="field"><label>Emails (one per row)</label><textarea data-ag-field="emails" data-i="${i}">${escapeHtml((a.emails || []).join('\n'))}</textarea></div>
-            <div class="edit-card-actions"><button class="delete" data-delete-ag="${i}">Delete Agency</button></div>
+            <div class="field"><label>${t('f_region')}</label><input data-ag-field="region" data-i="${i}" value="${escapeAttr(a.region)}"></div>
+            <div class="field"><label>${t('f_agency_name')}</label><input data-ag-field="name" data-i="${i}" value="${escapeAttr(a.name)}"></div>
+            <div class="field"><label>${t('f_contact')}</label><input data-ag-field="contact" data-i="${i}" value="${escapeAttr(a.contact || '')}" placeholder="${escapeAttr(t('f_optional'))}"></div>
+            <div class="field"><label>${t('f_address')}</label><textarea data-ag-field="address" data-i="${i}">${escapeHtml((a.address || []).join('\n'))}</textarea></div>
+            <div class="field"><label>${t('f_emails')}</label><textarea data-ag-field="emails" data-i="${i}">${escapeHtml((a.emails || []).join('\n'))}</textarea></div>
+            <div class="edit-card-actions"><button class="delete" data-delete-ag="${i}">${t('btn_delete_agency')}</button></div>
           </div>
         </div>
       `).join('');
@@ -868,7 +1135,7 @@
       root.querySelectorAll('[data-delete-ag]').forEach(btn => {
         btn.addEventListener('click', () => {
           const i = +btn.dataset.deleteAg;
-          if (!confirm(`Delete agency "${data.agencies[i].name}"?`)) return;
+          if (!confirm(t('confirm_delete_agency', { name: data.agencies[i].name }))) return;
           data.agencies.splice(i, 1);
           renderAgencies(); markDirty();
         });
@@ -908,7 +1175,7 @@
     $('save-btn').addEventListener('click', async () => {
       const btn = $('save-btn');
       btn.disabled = true;
-      $('save-status').textContent = 'Saving…';
+      $('save-status').textContent = t('btn_saving');
       try {
         const res = await fetch('/api/data', {
           method: 'POST',
@@ -917,17 +1184,17 @@
         });
         if (res.status === 401) {
           clearToken();
-          toast('Session expired — please log in again', 'error');
+          toast(t('toast_session_expired'), 'error');
           showLogin();
           return;
         }
         if (!res.ok) throw new Error('HTTP ' + res.status);
         markClean();
-        toast('Saved ✓', 'success');
+        toast(t('toast_saved'), 'success');
       } catch (e) {
-        toast('Save failed: ' + e.message, 'error');
+        toast(t('toast_save_failed') + ': ' + e.message, 'error');
         btn.disabled = false;
-        $('save-status').textContent = '● Unsaved changes';
+        $('save-status').textContent = t('status_dirty');
       }
     });
 
@@ -942,7 +1209,15 @@
     }
     function escapeAttr(s) { return escapeHtml(s); }
 
+    // ─── Wire language toggle buttons (both the login + header switches) ───
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => setLang(btn.dataset.lang));
+    });
+
     // ─── Go ─────────────────────────────────────────────────────────────
+    // Apply translations once before anything else, so the login screen renders
+    // in the saved language. setLang also flips the active state on .lang-btn.
+    setLang(LANG);
     boot();
   </script>
 </body>
