@@ -228,6 +228,15 @@
       color: #333;
       font-size: 14px;
       cursor: grab;
+      touch-action: none;
+      user-select: none;
+      padding: 4px 2px;
+    }
+    .edit-card-head .grip:active { cursor: grabbing; }
+    .edit-card.dragging {
+      opacity: 0.45;
+      background: #1a1a1a;
+      border-color: #444;
     }
     .edit-card-head .head-thumb {
       width: 48px; height: 30px;
@@ -531,7 +540,66 @@
       document.body.classList.remove('locked');
       ['admin-header', 'tabs', 'content', 'save-bar'].forEach(id => $(id).hidden = false);
       renderAll();
+      initDragSort($('films-list'), 'films', renderFilms);
+      initDragSort($('eras-list'),  'eras',  renderEras);
       markClean();
+    }
+
+    // ─── Drag-to-reorder ────────────────────────────────────────────────
+    // Vanilla pointer-event handler. Works with mouse + touch.
+    // - pointerdown on a `.grip` inside the container starts a drag
+    // - pointermove (on document) re-inserts the dragged card relative to siblings
+    // - pointerup commits the new order back to data[arrayName]
+    function initDragSort(container, arrayName, rerender) {
+      let dragging = null;
+
+      container.addEventListener('pointerdown', (e) => {
+        const grip = e.target.closest('.grip');
+        if (!grip) return;
+        const card = grip.closest('.edit-card');
+        if (!card || !container.contains(card)) return;
+        e.preventDefault();
+        dragging = card;
+        card.classList.add('dragging');
+        document.body.style.userSelect = 'none';
+      });
+
+      document.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        e.preventDefault();
+        // Find the card the pointer is currently over (skipping the dragged one)
+        const cards = [...container.querySelectorAll('.edit-card')].filter(c => c !== dragging);
+        let target = null;
+        for (const c of cards) {
+          const rect = c.getBoundingClientRect();
+          if (e.clientY >= rect.top && e.clientY <= rect.bottom) { target = c; break; }
+        }
+        if (!target) return;
+        const rect = target.getBoundingClientRect();
+        const before = e.clientY < rect.top + rect.height / 2;
+        container.insertBefore(dragging, before ? target : target.nextSibling);
+      });
+
+      document.addEventListener('pointerup', () => {
+        if (!dragging) return;
+        document.body.style.userSelect = '';
+        const cards = [...container.querySelectorAll('.edit-card')];
+        const oldArr = data[arrayName];
+        // data-card-idx still holds the *original* index from the last render
+        const newArr = cards.map(c => oldArr[+c.dataset.cardIdx]);
+        dragging.classList.remove('dragging');
+        dragging = null;
+        data[arrayName] = newArr;
+        rerender();    // re-render with the new order (resets data-card-idx)
+        markDirty();
+      });
+
+      document.addEventListener('pointercancel', () => {
+        if (!dragging) return;
+        dragging.classList.remove('dragging');
+        dragging = null;
+        document.body.style.userSelect = '';
+      });
     }
 
     $('login-form').addEventListener('submit', async e => {
@@ -590,8 +658,13 @@
     function renderEras() {
       const root = $('eras-list');
       root.innerHTML = data.eras.map((era, i) => `
-        <div class="edit-card open">
-          <div class="edit-card-body" style="border-top:none;padding:14px">
+        <div class="edit-card open" data-card-idx="${i}">
+          <div class="edit-card-head" style="cursor:default">
+            <span class="grip">⠿</span>
+            <div class="head-title">${escapeHtml(era.label) || '<em style="color:#444">(unnamed)</em>'}</div>
+            <div class="head-meta">// ${era.year}</div>
+          </div>
+          <div class="edit-card-body">
             <div class="field"><label>ID</label><input data-era-field="id" data-i="${i}" value="${escapeAttr(era.id)}"></div>
             <div class="field"><label>Label</label><input data-era-field="label" data-i="${i}" value="${escapeAttr(era.label)}"></div>
             <div class="field"><label>Year</label><input data-era-field="year" data-i="${i}" type="number" value="${era.year}"></div>
@@ -628,7 +701,7 @@
           `<option value="${escapeAttr(c.id)}"${c.id === film.category ? ' selected' : ''}>${escapeHtml(c.label)}</option>`
         ).join('');
         return `
-          <div class="edit-card" data-film-card="${i}">
+          <div class="edit-card" data-film-card="${i}" data-card-idx="${i}">
             <div class="edit-card-head" data-toggle="${i}">
               <span class="grip">⠿</span>
               <div class="head-thumb" style="background-image:url('${escapeAttr(film.thumb)}')"></div>
