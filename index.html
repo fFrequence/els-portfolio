@@ -84,6 +84,34 @@
       text-transform: uppercase;
       margin-top: 10px;
     }
+    #hero .cta {
+      pointer-events: auto;
+      margin-top: 36px;
+      display: inline-block;
+      background: none;
+      border: 1px solid #444;
+      color: #888;
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    #hero .cta::after {
+      content: ' →';
+      margin-left: 6px;
+      transition: transform 0.2s;
+      display: inline-block;
+    }
+    #hero .cta:hover {
+      color: #F0EDE8;
+      border-color: #F0EDE8;
+    }
+    #hero .cta:hover::after {
+      transform: translateX(4px);
+    }
 
     /* Card hover meta */
     .card-meta-hover {

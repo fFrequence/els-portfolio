@@ -46,6 +46,7 @@ function renderHero(data) {
     <h1>${esc(data.hero.title)}</h1>
     <p class="subtitle">${esc(data.hero.subtitle)}</p>
     <p class="location">${esc(data.hero.location)}</p>
+    <a class="cta" href="work.html">See my work</a>
   `;
 }
 
@@ -86,14 +87,6 @@ function renderWork(data) {
   // Film count
   const countEl = document.getElementById('film-count');
   if (countEl) countEl.textContent = String(data.films.length).padStart(2, '0') + ' FILMS';
-
-  // Filter bar
-  const filterBar = document.getElementById('filter-bar');
-  if (filterBar) {
-    filterBar.innerHTML = data.categories.map((cat, i) =>
-      `<button class="filter-btn${i === 0 ? ' active' : ''}" data-filter="${esc(cat.id)}">${esc(cat.label)}</button>`
-    ).join('');
-  }
 
   // Gallery
   const gallery = document.getElementById('gallery');
@@ -142,17 +135,6 @@ function renderWork(data) {
     }).join('');
   }
 
-  // Filter wiring
-  document.querySelectorAll('.filter-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      document.querySelectorAll('.work-card').forEach(card => {
-        card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
-      });
-    });
-  });
 }
 
 function renderAbout(data) {
