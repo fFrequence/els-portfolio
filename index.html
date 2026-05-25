@@ -88,16 +88,16 @@
       pointer-events: auto;
       margin-top: 36px;
       display: inline-block;
-      background: none;
-      border: 1px solid #444;
-      color: #888;
+      background: #000;
+      border: 1px solid #F0EDE8;
+      color: #F0EDE8;
       font-family: 'Share Tech Mono', monospace;
       font-size: 11px;
       letter-spacing: 0.25em;
       text-transform: uppercase;
       padding: 14px 28px;
       text-decoration: none;
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      transition: background 0.2s, color 0.2s;
     }
     #hero .cta::after {
       content: ' →';
@@ -106,8 +106,8 @@
       display: inline-block;
     }
     #hero .cta:hover {
-      color: #F0EDE8;
-      border-color: #F0EDE8;
+      background: #F0EDE8;
+      color: #080808;
     }
     #hero .cta:hover::after {
       transform: translateX(4px);
@@ -143,6 +143,62 @@
     @media (max-width: 480px) {
       #hero h1 { font-size: clamp(64px, 18vw, 100px); }
     }
+
+    /* ── MOBILE BACKGROUND CAROUSEL ── */
+    /* Vertical infinite-scroll of film thumbnails behind the hero on mobile.
+       Hidden on desktop (constellation takes over). Non-interactive — pure ambience. */
+    #mobile-bg-carousel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+    #mobile-bg-carousel .mbc-track {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      animation: mbc-scroll 32s linear infinite;
+      padding: 18px 0;
+    }
+    #mobile-bg-carousel .mbc-track img {
+      width: 75vw;
+      max-width: 320px;
+      aspect-ratio: 16/10;
+      object-fit: cover;
+      opacity: 0.32;
+      filter: brightness(0.55) saturate(85%);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      display: block;
+      flex-shrink: 0;
+    }
+    /* Vignette so edges fade to bg — keeps hero text legible over the carousel */
+    #mobile-bg-carousel::before,
+    #mobile-bg-carousel::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0;
+      height: 28vh;
+      pointer-events: none;
+      z-index: 2;
+    }
+    #mobile-bg-carousel::before {
+      top: 0;
+      background: linear-gradient(to bottom, #080808 0%, rgba(8,8,8,0) 100%);
+    }
+    #mobile-bg-carousel::after {
+      bottom: 0;
+      background: linear-gradient(to top, #080808 0%, rgba(8,8,8,0) 100%);
+    }
+    @keyframes mbc-scroll {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-50%); }
+    }
+    @media (max-width: 768px), (hover: none) and (pointer: coarse) {
+      #mobile-bg-carousel { display: block; }
+    }
   </style>
 </head>
 <body data-page="home">
@@ -159,6 +215,9 @@
       <li><a href="contact.html">Contact</a></li>
     </ul>
   </nav>
+
+  <!-- Mobile-only background carousel (populated by render.js) -->
+  <div id="mobile-bg-carousel"></div>
 
   <!-- Constellation (populated by render.js) -->
   <div id="constellation"></div>

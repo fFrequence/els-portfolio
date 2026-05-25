@@ -50,6 +50,19 @@ function renderHero(data) {
   `;
 }
 
+// Mobile-only — populates the background carousel behind the hero.
+// Duplicates the thumbnail list once so CSS translateY(0 → -50%) loops seamlessly.
+function renderMobileCarousel(data) {
+  const root = document.getElementById('mobile-bg-carousel');
+  if (!root) return;
+  const films = data.films.slice(0, 12);  // cap so the DOM doesn't get huge
+  const items = films.map(f =>
+    `<img src="${esc(f.thumb)}" alt="" loading="lazy" decoding="async">`
+  ).join('');
+  // Render twice for the seamless loop
+  root.innerHTML = `<div class="mbc-track">${items}${items}</div>`;
+}
+
 function renderConstellation(data) {
   const root = document.getElementById('constellation');
   if (!root) return;
@@ -262,7 +275,7 @@ function wireModal() {
   }
 
   const page = document.body.dataset.page;
-  if (page === 'home')    { renderHero(data); renderConstellation(data); }
+  if (page === 'home')    { renderHero(data); renderConstellation(data); renderMobileCarousel(data); }
   if (page === 'work')    { renderWork(data); }
   if (page === 'about')   { renderAbout(data); }
   if (page === 'contact') { renderContact(data); }
