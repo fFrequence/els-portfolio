@@ -448,13 +448,21 @@ nav .nav-links a.active { color: var(--text); }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); background: var(--text); }
 
-/* ── RESPONSIVE — TABLET (≤ 768px) ── */
-@media (max-width: 768px) {
-  html { cursor: auto; }
-  a { cursor: auto; }
-  #cursor, #cursor-glow { display: none; }
+/* ── RESPONSIVE — TABLET/PHONE (≤ 768px or touch device) ── */
+@media (max-width: 768px), (hover: none) and (pointer: coarse) {
+  /* Cursor — hide on touch / small screens entirely */
+  html, body, a, button, [data-hover] { cursor: auto !important; }
+  #cursor, #cursor-glow { display: none !important; }
 
-  nav { padding: 18px 24px; position: relative; }
+  /* Nav — solid bg so content can't bleed through on devices without backdrop-filter */
+  nav {
+    padding: 16px 20px;
+    position: fixed;
+    background: #0A0A0A;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  }
   .nav-toggle { display: flex; }
   nav .nav-links {
     position: absolute;
@@ -462,10 +470,8 @@ nav .nav-links a.active { color: var(--text); }
     left: 0;
     right: 0;
     flex-direction: column;
-    background: rgba(10, 10, 10, 0.96);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    background: #0A0A0A;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
     padding: 8px 0 16px;
     gap: 0;
     display: none;
@@ -474,24 +480,37 @@ nav .nav-links a.active { color: var(--text); }
   nav .nav-links li { width: 100%; }
   nav .nav-links a { display: block; padding: 12px 24px; font-size: 12px; }
 
+  /* Footer — also solid (was transparent on mobile) */
+  .footer-strip {
+    background: #0A0A0A;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
   .footer-strip .footer-ticker { display: none; }
+  .footer-strip .footer-socials { gap: 14px; }
+  .footer-strip .footer-socials a { font-size: 9px; }
 
-  #constellation .camera-card { width: 180px !important; }
-  #constellation .card-thumb { height: 112px !important; }
+  /* Home — hide the constellation entirely; mobile users get just the hero */
+  #constellation { display: none !important; }
+  #hero h1 { font-size: clamp(64px, 18vw, 110px) !important; }
+  #hero p.subtitle { font-size: clamp(15px, 3.6vw, 22px) !important; }
 
+  /* Work — single column, generous spacing */
   .page-header { padding: 32px 20px 20px; }
   .filter-bar { padding: 10px 20px; overflow-x: auto; flex-wrap: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .filter-bar::-webkit-scrollbar { display: none; }
   .gallery { padding: 0 20px 48px; }
-  .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .cards-grid { grid-template-columns: 1fr !important; gap: 20px; }
+  .year-heading h2 { font-size: clamp(26px, 7vw, 36px); }
 
-  .about-wrap { padding: 40px 24px 60px; }
-
-  .contact-wrap { padding: 40px 24px 60px; }
-  .contact-row { flex-direction: column; gap: 6px; }
+  /* About + Contact */
+  .about-wrap { padding: 40px 24px 60px; max-width: 100%; }
+  .contact-wrap { padding: 40px 24px 60px; max-width: 100%; }
+  .contact-row { flex-direction: column; gap: 6px; align-items: flex-start; }
   .contact-label { width: auto; }
-  .agency-entry { grid-template-columns: 1fr; }
+  .agency-entry { grid-template-columns: 1fr; gap: 6px; }
 
+  /* Modal */
   .modal-inner { width: 96vw; }
   .modal-info { flex-direction: column; gap: 12px; }
   .modal-share { align-self: flex-start; }
@@ -499,8 +518,9 @@ nav .nav-links a.active { color: var(--text); }
 
 /* ── RESPONSIVE — PHONE (≤ 480px) ── */
 @media (max-width: 480px) {
-  nav { padding: 14px 20px; }
-  .cards-grid { grid-template-columns: 1fr; }
-  #constellation .camera-card { width: 150px !important; }
-  #constellation .card-thumb { height: 94px !important; }
+  nav { padding: 14px 18px; }
+  .page-header { padding: 28px 16px 18px; }
+  .gallery { padding: 0 16px 40px; }
+  .about-wrap { padding: 32px 18px 48px; }
+  .contact-wrap { padding: 32px 18px 48px; }
 }
