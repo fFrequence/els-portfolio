@@ -4,16 +4,21 @@
 // ─── Constellation slot configs (the 9 orbits on the home page) ───
 // Films get assigned to slots by order — first 9 from data.films.
 const SLOTS = [
-  { radius: '17vmin', speed: '140s', start: '0s',    xs: 1.12, ys: 0.96, rot: -1,   bob: '0s'   },
-  { radius: '20vmin', speed: '175s', start: '-32s',  xs: 1.12, ys: 0.96, rot: 0.6,  bob: '-1s', ccw: true },
-  { radius: '24vmin', speed: '115s', start: '-25s',  xs: 1.15, ys: 0.95, rot: -0.7, bob: '-2s'  },
-  { radius: '30vmin', speed: '200s', start: '-66s',  xs: 1.22, ys: 0.93, rot: 1,    bob: '-3s', ccw: true },
-  { radius: '33vmin', speed: '150s', start: '-55s',  xs: 1.22, ys: 0.93, rot: -0.5, bob: '-4s'  },
-  { radius: '35vmin', speed: '105s', start: '-46s',  xs: 1.25, ys: 0.92, rot: 0.8,  bob: '-5s', ccw: true },
-  { radius: '40vmin', speed: '125s', start: '-75s',  xs: 1.30, ys: 0.90, rot: -1.1, bob: '-6s'  },
-  { radius: '43vmin', speed: '185s', start: '-130s', xs: 1.32, ys: 0.89, rot: 0.4,  bob: '-7s', ccw: true },
-  { radius: '46vmin', speed: '220s', start: '-160s', xs: 1.35, ys: 0.88, rot: -0.6, bob: '-8s'  }
+  // Pushed further from the centre + more horizontal stretch so cards hug the edges
+  { radius: '28vmin', speed: '140s', start: '0s',    xs: 1.30, ys: 0.92, rot: -1,   bob: '0s'   },
+  { radius: '30vmin', speed: '175s', start: '-32s',  xs: 1.30, ys: 0.92, rot: 0.6,  bob: '-1s', ccw: true },
+  { radius: '32vmin', speed: '115s', start: '-25s',  xs: 1.34, ys: 0.90, rot: -0.7, bob: '-2s'  },
+  { radius: '38vmin', speed: '200s', start: '-66s',  xs: 1.38, ys: 0.88, rot: 1,    bob: '-3s', ccw: true },
+  { radius: '40vmin', speed: '150s', start: '-55s',  xs: 1.40, ys: 0.86, rot: -0.5, bob: '-4s'  },
+  { radius: '42vmin', speed: '105s', start: '-46s',  xs: 1.42, ys: 0.86, rot: 0.8,  bob: '-5s', ccw: true },
+  { radius: '46vmin', speed: '125s', start: '-75s',  xs: 1.48, ys: 0.84, rot: -1.1, bob: '-6s'  },
+  { radius: '48vmin', speed: '185s', start: '-130s', xs: 1.50, ys: 0.82, rot: 0.4,  bob: '-7s', ccw: true },
+  { radius: '50vmin', speed: '220s', start: '-160s', xs: 1.52, ys: 0.80, rot: -0.6, bob: '-8s'  }
 ];
+
+// Card width on the home constellation. Bumped per client feedback.
+const HOME_CARD_W = 320;
+const HOME_CARD_THUMB_H = 200;
 
 // ─── Helpers ───
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({
@@ -74,12 +79,12 @@ function renderConstellation(data) {
     return `
       <div class="orbiter${ccwClass}" style="--radius:${slot.radius}; --speed:${slot.speed}; --start:${slot.start}; --xs:${slot.xs}; --ys:${slot.ys};">
         <div class="float" style="--rot:${slot.rot}deg; --bob:${slot.bob};">
-          <div class="camera-card" style="width:260px;"
+          <div class="camera-card" style="width:${HOME_CARD_W}px;"
                data-title="${esc(film.title)}"
                data-cat="${catStr}"
                data-vimeo="${esc(film.vimeo)}" data-hover>
             <div class="card-hud"><span>FPS ${esc(film.fps)} EI ${esc(film.ei)}</span><span><span class="rec-dot"></span>REC</span></div>
-            <div class="card-thumb" style="height:163px;">
+            <div class="card-thumb" style="height:${HOME_CARD_THUMB_H}px;">
               <img src="${esc(film.thumb)}" alt="${esc(film.title)}">
               <div class="corner-brackets"></div>
               <div class="crosshair"></div>
